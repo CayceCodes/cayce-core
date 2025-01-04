@@ -138,6 +138,21 @@ function getEverything(dir) {
 }
 
 function run(command: string, path: string){
+    if(path === "debug"){
+        let parser = new Parser();
+        parser.setLanguage(TsSfApex.apex);
+        const mgr : ScanManager = new ScanManager("debug",sampleSource,RULE_REGISTRY);
+        if(command === "scan"){
+            mgr.scan(parser,TsSfApex.apex)
+        }
+        else if(command === "dump"){
+            mgr.dump(parser,TsSfApex.apex)
+        }
+        else if(command === "measure"){
+            mgr.measure(parser,TsSfApex.apex)
+        }
+        return;
+    }
     // Scan config file to handle limiting, global options
     const startingFromDirectory = "c:/repos/bah/va/team-3/ff/va-teams/force-app/main/default/classes"; // Replace with your directory path
     //mgr.measure(parser,TsSfApex.apex);
