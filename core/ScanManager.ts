@@ -1,20 +1,16 @@
 import Parser, { Tree, SyntaxNode } from "tree-sitter";
 import * as TreeSitter from "tree-sitter";
-import ViolationAlert from "./ViolationAlert";
-import { MEASUREMENT_RULES } from "../rules/configuration/RuleRegistry";
 
 export default class ScanManager{
 
     SourcePath: string;
     SourceCode: string;
     RuleRegistry: any;
-    Alerts: Array<ViolationAlert>;
 
     constructor(sourcePath: string, sourceCode: string, registry: any){
         this.SourcePath = sourcePath;
         this.SourceCode = sourceCode;
         this.RuleRegistry = registry;
-        this.Alerts = [];
     }
 
     dump(parser: Parser, language: any){
@@ -42,20 +38,6 @@ export default class ScanManager{
                 }
             }
         
-            if(nodesToScan.length > 0){
-                for(let violation of ruleConfig.instance.inspect(nodesToScan,ruleConfig.arguments)){
-                    const alertItem: ViolationAlert = new ViolationAlert(violation,ruleConfig);
-                    alertItem.StartsAt = violation.TargetNode.startIndex;
-                    alertItem.EndsAt = violation.TargetNode.endIndex;
-                    this.Alerts.push(alertItem);
-
-                }
-            }
-            for(let alertItem of this.Alerts){
-                const startAt = alertItem.ViolationInstance.TargetNode.startIndex;
-                const endAt = alertItem.ViolationInstance.TargetNode.endIndex;
-                console.log(this.SourceCode.substring(startAt,endAt));
-            }
         }
     }
     measure(parser: Parser, language: any){

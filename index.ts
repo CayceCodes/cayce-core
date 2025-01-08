@@ -11,7 +11,7 @@ import {Command,Option,Argument} from "commander";
 import { readFile } from "fs";
 import { execSync } from "child_process";
 import { sourceMapsEnabled } from "process";
-import { RULE_REGISTRY } from "./rules/configuration/RuleRegistry.ts";
+import { RULE_REGISTRY } from "./rules/RuleRegistry.ts";
 const sampleSource : string = `
 /**
  * @description Example implementation of an extension from the VTC_BaseRepo
@@ -62,7 +62,13 @@ const program = new Command();
 program
     .name("SourceLoupe")
     .description("Static analysis with TypeScript and tree-sitter")
-    .version("0.0.1")
+    .version("0.0.1");
+
+program
+    .option("-r, --recurse","Recursively walk path.")
+    .option("-o, --output [fileName]", "Output to file. Type is inferred through the extension. No filename dumps to console.");
+
+
 program
     .command("scan")
     .description("Scan Apex files in the given source path (recursively.) Apply all rules in order to flag violations.")
@@ -84,14 +90,12 @@ program
     .action((sourcePath,command)=>{
         run('measure', sourcePath);
     });
-program
-    .option("-r,--recurse","Recursively walk path.");
 
     
 
 
 program.parse(process.argv);
-
+console.log(program.opts());
 const options = program.opts();
 const recurse = program.opts().recurse ?? false;
 function getEverything(dir) {
@@ -117,6 +121,9 @@ async function readdirRecursive(dir: string): Promise<string[]> {
 }
 
 function run(command: string, path: string){
+
+}
+function _run(command: string, path: string){
     // Scan config file to handle limiting, global options
 
     readdirRecursive(path).then(paths=>{
