@@ -1,5 +1,6 @@
 import Parser, { Tree, SyntaxNode } from "tree-sitter";
 import * as TreeSitter from "tree-sitter";
+import { RULE_REGISTRY } from "../rules/RuleRegistry";
 
 export default class ScanManager{
 
@@ -13,37 +14,30 @@ export default class ScanManager{
         this.RuleRegistry = registry;
     }
 
-    dump(parser: Parser, language: any){
+    dump(parser: Parser, language: any, queryString: string){
+        // Use dump as a mechanism to allow for ad-hoc ts queries?
         const tree = parser.parse(this.SourceCode);
-        const q : TreeSitter.Query = new TreeSitter.Query(language,`(class_declaration (modifiers (modifier (inherited_sharing)@mod)))`);
-        const matches: TreeSitter.QueryMatch[] = q.matches(tree.rootNode)
-        q.captures(tree.rootNode);
-        for(let m of matches){
-            for(let c of m.captures){
-                console.log(c.node.text);
+        if( queryString === ""){
+            queryString = `(class_declaration @mod)`;
+        }
+        console.log(queryString);
+        const query : TreeSitter.Query = new TreeSitter.Query(language,queryString);
+        const matches: TreeSitter.QueryMatch[] = query.matches(tree.rootNode)
+        for(let match of matches){
+            for(let capture of match.captures){
+                const sourceFragment = this.SourceCode.substring(capture.node.startIndex,capture.node.endIndex);
+                console.log(sourceFragment);
             }
         }
     }
     
     scan(parser: Parser, language: any){
-        parser.setLanguage(language);
-        const sourceTree: Tree = parser.parse(this.SourceCode)
-        
-        for(let ruleConfig of this.RuleRegistry.rules){
-            const describingNodes = sourceTree.rootNode.descendantsOfType(ruleConfig.describingNode);
-            let nodesToScan: Array<SyntaxNode> = []
-            for(let node of describingNodes){
-                if(node.parent.grammarType == ruleConfig.rootNode){
-                    nodesToScan.push(node);
-                }
-            }
-        
-        }
+        this.measure(parser,language);
     }
     measure(parser: Parser, language: any){
         const fileMeasure : FileMeasurements = new FileMeasurements(this.SourcePath);
         const tree = parser.parse(this.SourceCode);
-        for(let rule of MEASUREMENT_RULES.rules){
+        for(let rule of RULE_REGISTRY.rules){
             const measurement = {}
             measurement[rule.name] = {};
             for(let ruleQuery of rule.queries){
@@ -66,7 +60,6 @@ export default class ScanManager{
             }
             fileMeasure.Measurements.push(measurement);
         }
-        //console.log(JSON.stringify(fileMeasure));
     }
 }
 

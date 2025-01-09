@@ -5,7 +5,6 @@ import * as TreeSitter from "tree-sitter";
 import Parser from "tree-sitter";
 import TsSfApex from "tree-sitter-sfapex";
 import ScanManager from "./core/ScanManager.ts";
-import NameLengthRule from "./rules/implementation/NameLengthRule.ts";
 import type ScanRule from "./core/ScanRule.ts";
 import {Command,Option,Argument} from "commander";
 import { readFile } from "fs";
@@ -78,10 +77,11 @@ program
     });
 program
     .command("dump")
-    .description("Dump the raw syntax tree. Primarily for debugging.")
+    .description("Dump the results of a tree sitter query. Primarily for debugging.")
     .addArgument(new Argument("sourcePath", "Required. Path to the source being scanned."))
-    .action((sourcePath,command)=>{
-        run('dump', sourcePath);
+    .addArgument(new Argument("query", "Tree sitter query to execute."))
+    .action((sourcePath, query, command)=>{
+        run('dump', sourcePath, query);
     });
 program
     .command("measure")
@@ -120,10 +120,13 @@ async function readdirRecursive(dir: string): Promise<string[]> {
     return files;
 }
 
-function run(command: string, path: string){
+function _run(command: string, path: string){
 
 }
-function _run(command: string, path: string){
+function run(command: string, path: string, query: string = ""){
+    if(path === "test"){
+        path = startingFromDirectory;
+    }
     // Scan config file to handle limiting, global options
 
     readdirRecursive(path).then(paths=>{
@@ -137,7 +140,7 @@ function _run(command: string, path: string){
                         case "scan":
                             scanManager.scan(parser,TsSfApex.apex)
                         case "dump":
-                            scanManager.dump(parser,TsSfApex.apex)
+                            scanManager.dump(parser,TsSfApex.apex,query)
                         case "measure":
                             scanManager.measure(parser,TsSfApex.apex)
                     }
