@@ -137,6 +137,7 @@ function getEverything(dir) {
   return execSync(listCommand).toString(`utf-8`).split(/\r?\n/);
 }
 
+
 function run(command: string, path: string){
     if(path === "debug"){
         let parser = new Parser();

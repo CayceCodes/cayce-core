@@ -67,6 +67,13 @@ export default class ScanManager{
             measurement[rule.name] = {};
             for(let ruleQuery of rule.queries){
                 measurement[rule.name][ruleQuery.name] = 0;
+                if (ruleQuery.subqueries){
+                    for (let subQuery of ruleQuery.subqueries){
+                        // ALL need to evaluate to true
+                        const query : TreeSitter.Query = new TreeSitter.Query(language,ruleQuery.query);
+                        const matches: TreeSitter.QueryMatch[] = query.matches(tree.rootNode);
+                    }
+                }
                 const query : TreeSitter.Query = new TreeSitter.Query(language,ruleQuery.query);
                 const matches: TreeSitter.QueryMatch[] = query.matches(tree.rootNode);
                 if(ruleQuery.function != null){

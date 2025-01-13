@@ -26,30 +26,68 @@ export const MEASUREMENT_RULES = {
     "rules":
     [
         {
-            "name":"variables",
-            "queries":[{
-                    "name":"Total",
-                    "query":'(variable_declarator (identifier) @constant)',
-                    "function":null
-                },{
-                    "name":"Length < 3",
-                    "query":'(variable_declarator (identifier) @exp (#match? @exp "^[a-zA-Z]{0,3}$"))',
-                    "function":null
-                }]
+            "category":"variables",
+            "metrics":[{
+                "name":"All Variables",
+                "type":"count",
+                "source-token":"variables",
+                "filter":null,
+                "advanced":null
+            },
+            {
+                "name":"Variable Names Three Characters or Less",
+                "type":"count",
+                "source-token":"variable_declarator",
+                "filter":"identifier;length;<=3",
+                "advanced":null
+            },
+            ,
+            {
+                "name":"Variable Names Three Characters or Less",
+                "type":"count",
+                "source-token":"variable_declarator",
+                "filter":"identifier;regex;[a-z][A-Z]",
+                "advanced":null
+            }]
         },
         {
-            "name":"Class Declarations",
-            "queries":[{
-                    "name":"Total",
-                    "query":'(class_declaration) @constant',
-                    "function":null
-
-                },{
-                    "name":"No comment header",
-                    "query":'((block_comment) (class_declaration)) @exp',
-                    "function":function(node){return node.text.includes("@description")}
-                }]
+            "category":"logging",
+            "metrics":[{
+                "name":"Error Logging",
+                "type":"count",
+                "source-token":"method_invocation",
+                "filter":"text;regex;Logger\.error\(",
+                "advanced":null
+            },
+            {
+                "name":"Code Must Not Use System.debug(...)",
+                "type":"count",
+                "source-token":"method_invocation",
+                "filter":"text;regex;System\.debug\(",
+                "advanced":null
+            }]
         },
+        {
+            "category":"Documentation",
+            "metrics":[{
+                "name":"Block Documentation Comments",
+                "type":"count",
+                "source-token":"block_comment",
+                "filter":null,
+                "advanced":null
+            },
+            {
+                "name":"Block Documentation Comments Without Descriptions",
+                "type":"count",
+                "source-token":"block_comment",
+                "filter":"text;not-contains;@description",
+                "advanced":null
+            }]
+        }
+
+
     ]
 }
 
+
+//System\.debug\((.*?)\);
