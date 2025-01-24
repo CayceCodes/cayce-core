@@ -1,1 +1,0 @@
-git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch sourcery.exe' --prune-empty --tag-name-filter cat -- --all
