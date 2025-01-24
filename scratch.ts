@@ -1,6 +1,10 @@
 import TsSfApex from "tree-sitter-sfapex";
 import ScanRule from "./core/ScanRule";
+<<<<<<< HEAD
+import { RULE_REGISTRY } from "./rules/RuleRegistry";
+=======
 import { RULE_REGISTRY } from "./rules/configuration/RuleRegistry";
+>>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
 import Parser, { SyntaxNode, Tree } from "tree-sitter";
 import ViolationAlert from "./core/ViolationAlert";
 
