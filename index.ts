@@ -5,12 +5,20 @@ import * as TreeSitter from "tree-sitter";
 import Parser from "tree-sitter";
 import TsSfApex from "tree-sitter-sfapex";
 import ScanManager from "./core/ScanManager.ts";
+<<<<<<< HEAD
+=======
+import NameLengthRule from "./rules/implementation/NameLengthRule.ts";
+>>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
 import type ScanRule from "./core/ScanRule.ts";
 import {Command,Option,Argument} from "commander";
 import { readFile } from "fs";
 import { execSync } from "child_process";
 import { sourceMapsEnabled } from "process";
+<<<<<<< HEAD
 import { RULE_REGISTRY } from "./rules/RuleRegistry.ts";
+=======
+import { RULE_REGISTRY } from "./rules/configuration/RuleRegistry.ts";
+>>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
 const sampleSource : string = `
 /**
  * @description Example implementation of an extension from the VTC_BaseRepo
@@ -61,6 +69,7 @@ const program = new Command();
 program
     .name("SourceLoupe")
     .description("Static analysis with TypeScript and tree-sitter")
+<<<<<<< HEAD
     .version("0.0.1");
 
 program
@@ -68,6 +77,9 @@ program
     .option("-o, --output [fileName]", "Output to file. Type is inferred through the extension. No filename dumps to console.");
 
 
+=======
+    .version("0.0.1")
+>>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
 program
     .command("scan")
     .description("Scan Apex files in the given source path (recursively.) Apply all rules in order to flag violations.")
@@ -77,11 +89,18 @@ program
     });
 program
     .command("dump")
+<<<<<<< HEAD
     .description("Dump the results of a tree sitter query. Primarily for debugging.")
     .addArgument(new Argument("sourcePath", "Required. Path to the source being scanned."))
     .addArgument(new Argument("query", "Tree sitter query to execute."))
     .action((sourcePath, query, command)=>{
         run('dump', sourcePath, query);
+=======
+    .description("Dump the raw syntax tree. Primarily for debugging.")
+    .addArgument(new Argument("sourcePath", "Required. Path to the source being scanned."))
+    .action((sourcePath,command)=>{
+        run('dump', sourcePath);
+>>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
     });
 program
     .command("measure")
@@ -90,11 +109,17 @@ program
     .action((sourcePath,command)=>{
         run('measure', sourcePath);
     });
+<<<<<<< HEAD
+=======
+program
+    .option("-r,--recurse","Recursively walk path.");
+>>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
 
     
 
 
 program.parse(process.argv);
+<<<<<<< HEAD
 console.log(program.opts());
 const options = program.opts();
 const recurse = program.opts().recurse ?? true;
@@ -104,18 +129,26 @@ const recurse = program.opts().recurse ?? true;
  * @param dir Path we're starting from
  * @returns Array of file nanes with full path
  */
+=======
+
+const options = program.opts();
+const recurse = program.opts().recurse ?? false;
+>>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
 function getEverything(dir) {
   const onWindows = process.platform === `win32`;
   const listCommand = onWindows ? `dir /b/o/s "${dir}"` : `find ${dir}`;
   return execSync(listCommand).toString(`utf-8`).split(/\r?\n/);
 }
 
+<<<<<<< HEAD
 
 /**
  * 
  * @param dir The directory we are reading
  * @returns 
  */
+=======
+>>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
 async function readdirRecursive(dir: string): Promise<string[]> {
     const entries = await fs.readdir(dir, { withFileTypes: true });
     const files: string[] = [];
@@ -128,6 +161,7 @@ async function readdirRecursive(dir: string): Promise<string[]> {
         files.push(fullPath);
       }
     }
+<<<<<<< HEAD
     return files;
 }
 
@@ -147,6 +181,15 @@ function run(command: string, path: string, query: string = ""){
 
     // Scan config file to handle limiting, global options
     
+=======
+  
+    return files;
+}
+
+function run(command: string, path: string){
+    // Scan config file to handle limiting, global options
+
+>>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
     readdirRecursive(path).then(paths=>{
         paths.filter(fileName=>fileName.endsWith(".cls")).forEach(filePath=>{
             fs.readFile(filePath,'utf8')
@@ -158,6 +201,7 @@ function run(command: string, path: string, query: string = ""){
                         case "scan":
                             scanManager.scan(parser,TsSfApex.apex)
                         case "dump":
+<<<<<<< HEAD
                             scanManager.dump(parser,TsSfApex.apex,query)
                         case "measure":
                             scanManager.measure(parser,TsSfApex.apex)
@@ -169,5 +213,15 @@ function run(command: string, path: string, query: string = ""){
     
         });
     });
+=======
+                            scanManager.dump(parser,TsSfApex.apex)
+                        case "measure":
+                            scanManager.measure(parser,TsSfApex.apex)
+                    }
+            })
+    
+        });
+    })
+>>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
                 
 }

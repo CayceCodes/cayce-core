@@ -4,9 +4,15 @@
   "description": "Static analysis using TypeScript",
   "main": "app.js",
   "scripts": {
+<<<<<<< HEAD
     "test": "jest",
     "start": "node -r ts-node/register --env-file=.myenvfile index.ts",
     "loupe": "bun index.ts measure c:/repos/bah/va/team-3/ff/va-teams/force-app/main/default/classes"
+=======
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node -r ts-node/register --env-file=.myenvfile index.ts",
+    "loupe": "bun index.ts"
+>>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
   },
   "repository": {
     "type": "git",
@@ -25,7 +31,10 @@
   "devDependencies": {
     "@types/node": "^22.10.2",
     "commander": "^12.1.0",
+<<<<<<< HEAD
     "jest": "^29.7.0",
+=======
+>>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
     "ts-node": "^10.9.2"
   }
 }
