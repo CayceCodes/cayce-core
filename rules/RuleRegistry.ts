@@ -19,17 +19,13 @@ export const RULE_REGISTRY =
                     "name":"Total",
                     "context":"measure",
                     "message":"This is the total number of variable declarations, not counting method arguments.",
-                    "type":"treesitter",
                     "query":'(variable_declarator (identifier) @exp)',
-                    "function":null
                 },
                 {
                     "name":"Length < 3",
                     "context":"scan,measure",
-                    "type":"treesitter",
                     "message":"Variables should be descriptive, clear, and concise with names over three characters long.",
                     "query":'(variable_declarator (identifier) @exp)',
-                    "regex":null,
                     "function":function(node){return node.text.length > 3;}
                 },
                 {
@@ -38,7 +34,6 @@ export const RULE_REGISTRY =
                     "message":"A trivial RegEx (for testing) has produced some matches.",
                     "query":'(variable_declarator (identifier) @exp)',
                     "pattern":"foo_[a-zA-Z0-9]*",
-                    "function":null
                 }
 
             ]

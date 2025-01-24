@@ -119,7 +119,6 @@ program
 
 
 program.parse(process.argv);
-<<<<<<< HEAD
 console.log(program.opts());
 const options = program.opts();
 const recurse = program.opts().recurse ?? true;
@@ -129,26 +128,18 @@ const recurse = program.opts().recurse ?? true;
  * @param dir Path we're starting from
  * @returns Array of file nanes with full path
  */
-=======
-
-const options = program.opts();
-const recurse = program.opts().recurse ?? false;
->>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
 function getEverything(dir) {
   const onWindows = process.platform === `win32`;
   const listCommand = onWindows ? `dir /b/o/s "${dir}"` : `find ${dir}`;
   return execSync(listCommand).toString(`utf-8`).split(/\r?\n/);
 }
 
-<<<<<<< HEAD
 
 /**
  * 
  * @param dir The directory we are reading
  * @returns 
  */
-=======
->>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
 async function readdirRecursive(dir: string): Promise<string[]> {
     const entries = await fs.readdir(dir, { withFileTypes: true });
     const files: string[] = [];
@@ -161,7 +152,6 @@ async function readdirRecursive(dir: string): Promise<string[]> {
         files.push(fullPath);
       }
     }
-<<<<<<< HEAD
     return files;
 }
 
@@ -181,15 +171,6 @@ function run(command: string, path: string, query: string = ""){
 
     // Scan config file to handle limiting, global options
     
-=======
-  
-    return files;
-}
-
-function run(command: string, path: string){
-    // Scan config file to handle limiting, global options
-
->>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
     readdirRecursive(path).then(paths=>{
         paths.filter(fileName=>fileName.endsWith(".cls")).forEach(filePath=>{
             fs.readFile(filePath,'utf8')
@@ -201,7 +182,6 @@ function run(command: string, path: string){
                         case "scan":
                             scanManager.scan(parser,TsSfApex.apex)
                         case "dump":
-<<<<<<< HEAD
                             scanManager.dump(parser,TsSfApex.apex,query)
                         case "measure":
                             scanManager.measure(parser,TsSfApex.apex)
@@ -213,15 +193,5 @@ function run(command: string, path: string){
     
         });
     });
-=======
-                            scanManager.dump(parser,TsSfApex.apex)
-                        case "measure":
-                            scanManager.measure(parser,TsSfApex.apex)
-                    }
-            })
-    
-        });
-    })
->>>>>>> bad0e45ca6019ee3254ae72bccfe52f5fa16df95
                 
 }
