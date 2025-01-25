@@ -41,7 +41,7 @@ The rules are stored (currently) in ./rules/RuleRegistry.ts. This will change, a
     "priority:1,
     "query":"Tree sitter query for defining what we want to inspect.",
     "regex":"A regular expression that further refines the query.",
-    "function":function(node){return node != null;}     // Anonymous function to run against the folo
+    "scanFunction":function(node){return node != null;}     // Anonymous function to run against the node
 }
 ```
 
