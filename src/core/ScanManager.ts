@@ -22,6 +22,11 @@ export default class ScanManager{
         this._nodeTree = parser.parse(this._sourceCode);
     }
 
+    /**
+     * Dump is here as a way to quickly test out new rules without having to create them. It's basically
+     * a mini playground.
+     * @param queryString A tree sitter query. Can be as simple or as complex as you want.
+     */
     dump(queryString: string){
         // Use dump as a mechanism to allow for ad-hoc ts queries?
         const result: Array<DumpResult> = [];
@@ -39,11 +44,23 @@ export default class ScanManager{
         console.log(JSON.stringify(result));
     }
     
+    /**
+     * Scan is the scanner scannerific scantaculous main method for inspecting code for violations of given rules.
+     * Rules are provided to the ScanManager from elsewhere.
+     * @returns A map of cateogries->list of violations
+     */
     scan():  Map<string,Array<Violation>>{
         return this._scan("scan");
     }
 
-    // (#match? @exp "^[a-zA-Z]{0,3}$")
+    /**
+     * Common scan method used by both scan and measure. Both were consolidated here as both essentially
+     * did the same thing, just reported the results differently. Realizing that how the report is formatted
+     * should be the purview of something other than the scanner, I moved that stuff out.
+     * @param context What operational contecxt we are using. Scan or measure are currently supported.
+     * @returns `Map<string,Array<Violation>>` A map of category->array of violations. Allows for some
+     * custom organization
+     */
     private _scan(context: string):  Map<string,Array<Violation>>{
         const tree = this._nodeTree;
         if(this._ruleRegistry === null || this._ruleRegistry.getRules() === null){
@@ -61,6 +78,11 @@ export default class ScanManager{
                 }
                 let queryText = ruleQuery.query;
                 if(ruleQuery.pattern != null){
+                    // Note that tree-sitter is persnickity about regular expressions.
+                    // It's not that great about giving you feedback if the regex is gibbed.
+                    // Including this here fragment because I know it works...it's just for reference
+                    // (#match? @exp "^[a-zA-Z]{0,3}$")
+
                     const regExInsert = `(#match? @exp "${ruleQuery.pattern}")`;
                     queryText = queryText.replace("@exp", regExInsert);
                 }
@@ -98,6 +120,10 @@ export default class ScanManager{
 }
 
 
+/**
+ * Simple object for containing information returned from a dump operation. Dump accepts
+ * a  tree sitter query and spits back the requested source fragment to the console.
+ */
 export class DumpResult{
     SourceFragment: string;
     StartIndex: number;
@@ -110,6 +136,10 @@ export class DumpResult{
     }
 }
 
+/**
+ * Container for rules. How they are stored (JSON, TOML, whatever) is up to the 
+ * consumer. Was thinking of changing this to YAML to align with GH?
+ */
 export class RuleRegistry{
     private _rules: Map<string,RuleDefinition>;
     
@@ -153,6 +183,9 @@ export class RuleRegistry{
 
 }
 
+/**
+ * Moar value object/container classes
+ */
 class RuleDefinition{
     queries: any;
     category: string;

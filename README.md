@@ -1,11 +1,9 @@
 ```
- _ ___ ___ _ _ ___ ___ ___ 
-| |_ -| . | | |  _|  _| -_|
-| |___|___|___|_|_|___|___|
-| | . | | | . | -_|
-| |___|___|  _|___|
-|___________|     
-
+                         _                 
+ ___ ___ _ _ ___ ___ ___| |___ _ _ ___ ___ 
+|_ -| . | | |  _|  _| -_| | . | | | . | -_|
+|___|___|___|_| |___|___|_|___|___|  _|___|
+                                  |_|   
 ```
 # sourceloupe
 
@@ -35,59 +33,16 @@ As things take shape, some clear benefits are coming into focus. These benefits 
 
 The rules are stored (currently) in ./rules/RuleRegistry.ts. This will change, as it's probably nicer to allow a custom ruleset to be passed in. As long as the rules stay simple.
 
-Here are a few annotated example rules that are collected into a "variables" category:
-
-```typescript
+```javascript
 {
-    "rules":
-    [
-        {
-            // The "name" here is for organizational purposes so rules can be
-            // categorized logically
-            "name":"Variables",
-            
-            // Rules are made up of a series of queries, because at the 
-            // bare-metal level all rules start with a tree sitter query
-            // in order to collect the nodes that are interesting to them.
-            "queries":[{
-                    // Query name, can be anything
-                    "name":"Total",
-                    "context": "measure",
-                    // There are two raw 'types' of query: treesitter and regex
-                    // Regex still uses tree sitter. This may change; the "type"
-                    // just be a function of what you supply
-                    "message":"Total number of variables",
-                    // A tree sitter query.
-                    "query":'(variable_declrator (identifier) @exp)',
-                    // Optional JS anonymous function. If it returns false, then the test failed
-                    "function":null,
-                    "regex": null
-                },
-                {
-                    "name":"Length < 3",
-                    "context": "measure,scan",
-                    "message": "Variable names must be longer than three characters",
-                    // THese are the three mechanisms used to identify violations.
-                    // Query is required, as it's the fundamental method of getting you the right syntax node(s)
-                    // Function is an anonymous function that returns true (no violation) or false (violation)
-                    // Regex is an optional regular expression pattern that can further narrow in on an important context. If it finds matches, it flags a violation
-                    "query":'(variable_declarator (identifier) @exp)',
-                    "function":function(node){return node.text.length > 3;},
-                    "regex": null
-                },
-                {
-                    "name":"Trivial RegEx",
-                    "message":"This code is bananas!",
-                    "query":'(variable_declarator (identifier) @exp)',
-                    "pattern":"foo_[a-zA-Z0-9]*",
-                    "function":null
-                }
-
-            ]
-        }
-    ]
+    "category":"variables",
+    "name":"Some descriptive name",
+    "message":"Tell the user what has been flagged, why it's been flagged, and how to fix it.",
+    "priority:1,
+    "query":"Tree sitter query for defining what we want to inspect.",
+    "regex":"A regular expression that further refines the query.",
+    "function":function(node){return node != null;}     // Anonymous function to run against the folo
 }
-
 ```
 
 PRO TIP:
@@ -99,21 +54,7 @@ This is a great resource.
 
 
 ## Current Usage
-```
-Usage: bun index.ts [command] [options]
 
-Static analysis with TypeScript and tree-sitter
+In order to get any use out of this thing, you're going to need some rules to give it.
+Those rules are defined as JSON/options structures. You can add as many as you want, but the rules collection is locked down as a private variable and only accessible via methods. 
 
-Options:
-  -V, --version         output the version number
-  -r,--recurse          Recursively walk path.
-  -h, --help            display help for command
-
-Commands:
-  scan <sourcePath>     Scan Apex files in the given source path (recursively.) Apply all rules in order to flag
-                        violations.
-  dump <sourcePath>     Dump the raw syntax tree. Primarily for debugging.
-  measure <sourcePath>  Get raw data about source code for analysis.
-  help [command]        display help for command
-```
- 
