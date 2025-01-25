@@ -11,8 +11,8 @@ var Violation = /** @class */ (function () {
      * @param rule
      * @param args
      */
-    function Violation(node, rule, ruleQuery, filePath) {
-        this.RuleQuery = ruleQuery;
+    function Violation(node, rule, filePath) {
+        this.Rule = rule;
         this.FilePath = filePath;
         this.SourceSyntaxNode = node;
     }

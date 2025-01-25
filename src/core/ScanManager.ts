@@ -1,6 +1,7 @@
 import Parser, { Tree, SyntaxNode } from "tree-sitter";
 import * as TreeSitter from "tree-sitter";
 import Violation from "./Violation";
+import Rule from "../types/Rule";
 
 export default class ScanManager{
 
@@ -8,15 +9,16 @@ export default class ScanManager{
     private _nodeTree: any;
     private _parser: Parser;
     private _language: any;
-    private _ruleRegistry: any;
+    private _rules: Array<Rule>;
     private _sourcePath: string;
     private _sourceCode: string;
     private _violations: Map<string,Array<Violation>>;
 
-    constructor(parser: Parser, language: any,sourcePath: string, sourceCode: string, registry: RuleRegistry){
+
+    constructor(parser: Parser, language: any,sourcePath: string, sourceCode: string, rules: Array<Rule>){
         this._sourcePath = sourcePath;
         this._sourceCode = sourceCode;
-        this._ruleRegistry = registry;
+        this._rules = rules;
         this._language = language;
         this._parser = parser;
         this._nodeTree = parser.parse(this._sourceCode);
@@ -63,53 +65,51 @@ export default class ScanManager{
      */
     private _scan(context: string):  Map<string,Array<Violation>>{
         const tree = this._nodeTree;
-        if(this._ruleRegistry === null || this._ruleRegistry.getRules() === null){
+        if(this._rules === null || this._rules.length === 0){
         }
         const resultMap: Map<string,Array<Violation>> = new Map<string,Array<Violation>>();
-        for(let ruleMapKey of this._ruleRegistry.getRules().keys()){
-            const rule: RuleDefinition = this._ruleRegistry.getRules()[ruleMapKey];
+        for(let rule of this._rules){
             if(!resultMap.has(rule.category)){
                 resultMap.set(rule.category,[]);
             }
-            for(let ruleQuery of rule.queries){
-                // First the tree sitter query. :everage the built-in regex
-                if(!ruleQuery.getRules().context.includes(context)){
-                    continue;
-                }
-                let queryText = ruleQuery.query;
-                if(ruleQuery.pattern != null){
-                    // Note that tree-sitter is persnickity about regular expressions.
-                    // It's not that great about giving you feedback if the regex is gibbed.
-                    // Including this here fragment because I know it works...it's just for reference
-                    // (#match? @exp "^[a-zA-Z]{0,3}$")
+            
+            // First the tree sitter query. :everage the built-in regex
+            if(!rule.context.includes(context)){
+                continue;
+            }
+            let queryText = rule.query;
+            if(rule.regex != null){
+                // Note that tree-sitter is persnickity about regular expressions.
+                // It's not that great about giving you feedback if the regex is gibbed.
+                // Including this here fragment because I know it works...it's just for reference
+                // (#match? @exp "^[a-zA-Z]{0,3}$")
 
-                    const regExInsert = `(#match? @exp "${ruleQuery.pattern}")`;
-                    queryText = queryText.replace("@exp", regExInsert);
-                }
-                try{
-                    const query : TreeSitter.Query = new TreeSitter.Query(this._language,queryText);
-                    const matches: TreeSitter.QueryMatch[] = query.matches(this._nodeTree.rootNode);
-                    matches.forEach(match=>{
-                        match.captures.forEach(capture=>{
-                            let violationFlagged: boolean = true;
-                            // Now on to functions
-                            if(ruleQuery.function != null){
-                                const queryFunction = ruleQuery.function;
-                                violationFlagged = queryFunction(capture.node);
-                            }
-                            if(violationFlagged){
-                                const newViolation: Violation = new Violation(capture.node,rule,ruleQuery,this._sourcePath);
-                                resultMap[rule.category].push(newViolation);
-                            }
-                        });
+                const regExInsert = rule.regex == null ? "" : `(#match? @exp "${rule.regex}")`;
+                queryText += regExInsert;
+            }
+            try{
+                const query : TreeSitter.Query = new TreeSitter.Query(this._language,queryText);
+                const matches: TreeSitter.QueryMatch[] = query.matches(this._nodeTree.rootNode);
+                matches.forEach(match=>{
+                    match.captures.forEach(capture=>{
+                        let violationFlagged: boolean = true;
+                        // Now on to functions
+                        if(rule.scanFunction != null){
+                            const queryFunction = rule.scanFunction;
+                            violationFlagged = queryFunction(capture.node);
+                        }
+                        if(violationFlagged){
+                            const newViolation: Violation = new Violation(capture.node,rule,this._sourcePath);
+                            resultMap[rule.category].push(newViolation);
+                        }
                     });
-    
-                }
-                catch(treeSitterError: any){
-                    console.error(`A tree-sitter query error occurred: ${treeSitterError}`);
-                }
+                });
 
             }
+            catch(treeSitterError: any){
+                console.error(`A tree-sitter query error occurred: ${treeSitterError}`);
+            }
+
         }
         return resultMap;
     }
@@ -134,70 +134,6 @@ export class DumpResult{
         this.StartIndex = node.startIndex;
         this.EndIndex = node.endIndex;
     }
-}
-
-/**
- * Container for rules. How they are stored (JSON, TOML, whatever) is up to the 
- * consumer. Was thinking of changing this to YAML to align with GH?
- */
-export class RuleRegistry{
-    private _rules: Map<string,RuleDefinition>;
-    
-    getRules(): Map<string,RuleDefinition>{
-        return this._rules;
-    
-    }
-    
-    /**
-     * Adds a rule query. Could use a value object
-     * @param category Overall category for the rule. Anything
-     * @param name      Name for the query/"inspection"
-     * @param context  Either scan, measure or 'scan,measure'
-     * @param message What to show the user
-     * @param query  Tree sitter query that selects the nodes you want
-     * @param scanFunction Anon. function to run against the nodes
-     * @param regEx Regular expression to further filter the query
-     */
-    addRuleQuery(category: string, name: string, context: string, message: string,query: string, scanFunction?: any, regEx?: string){
-        let ruleDefinition: RuleDefinition
-
-        if(this._rules.has(category)){
-            ruleDefinition = this._rules[category];
-        }
-        else{
-            ruleDefinition = new RuleDefinition();
-            ruleDefinition.category = category;
-            ruleDefinition.queries = [];
-        }
-
-        const newQuery: QueryDefinition = new QueryDefinition();
-        newQuery.name = name;
-        newQuery.context = context;
-        newQuery.message = message;
-        newQuery.query = query;
-        newQuery.function = scanFunction;
-        newQuery.regex = regEx;
-        
-        ruleDefinition.queries.push(newQuery);
-    }
-
-}
-
-/**
- * Moar value object/container classes
- */
-class RuleDefinition{
-    queries: any;
-    category: string;
-}
-
-class QueryDefinition{
-    name: string;
-    context: string;
-    message: string;
-    query: string;
-    regex: string;
-    function: any;
 }
 
 const RULE_REGISTRY = 
