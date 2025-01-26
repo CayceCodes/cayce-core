@@ -9,13 +9,23 @@ export default class ScanManager{
     private _nodeTree: any;
     private _parser: Parser;
     private _language: any;
-    private _rules: Array<ScanRule>;
+    private _rules: Array<string>;
     private _sourcePath: string;
     private _sourceCode: string;
     private _violations: Map<string,Array<Violation>>;
 
 
-    constructor(parser: Parser, language: any,sourcePath: string, sourceCode: string, rules: Array<ScanRule>){
+/*
+
+{
+  parser: "foo",
+  plugins: ["prettier-plugin-foo"],
+});
+
+
+ */
+
+    constructor(parser: Parser, language: any,sourcePath: string, sourceCode: string, rules: Array<string>){
         parser.setLanguage(language);
         this._sourcePath = sourcePath;
         this._sourceCode = sourceCode;
@@ -47,13 +57,18 @@ export default class ScanManager{
         console.log(JSON.stringify(result));
     }
     
+
+    async measure(parser: Parser, language: any):  Map<string,Array<Violation>> {
+        return this._scan("measure");
+    }
+
     /**
      * Scan is the scanner scannerific scantaculous main method for inspecting code for violations of given rules.
      * Rules are provided to the ScanManager from elsewhere.
      * @returns A map of cateogries->list of violations
      */
-    scan():  Map<string,Array<Violation>>{
-        return this._scan("scan");
+    async scan():  Promise<Map<string, Violation[]>>{
+        return await this._scan("scan");
     }
 
     /**
@@ -64,7 +79,7 @@ export default class ScanManager{
      * @returns `Map<string,Array<Violation>>` A map of category->array of violations. Allows for some
      * custom organization
      */
-    private _scan(context: string):  Map<string,Array<Violation>>{
+    private async _scan(context: string):  Map<string,Array<Violation>>{
         const tree = this._nodeTree;
         if(this._rules === null || this._rules.length === 0){
         }
@@ -109,10 +124,6 @@ export default class ScanManager{
 
         }
         return resultMap;
-    }
-
-    measure(parser: Parser, language: any):  Map<string,Array<Violation>> {
-        return this._scan("measure");
     }
 }
 

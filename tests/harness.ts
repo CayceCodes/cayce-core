@@ -24,6 +24,12 @@ public with sharing class TestHarnessApex{
     }
 }`;
 
+    // {
+    //     plugins: ["sampleloupe"],
+    // }
+
+
+
 const parser: Parser = new Parser();
 const path: string = `C:\\repos\\sourceloupe\\tests\\`;
-const manager: ScanManager = new ScanManager(parser, TsSfApex.apex, path, source, [new SampleRule()]);
+const manager: ScanManager = new ScanManager(parser, TsSfApex.apex, path, source, ["sampleloupe"]);
