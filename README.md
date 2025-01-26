@@ -58,3 +58,68 @@ This is a great resource.
 In order to get any use out of this thing, you're going to need some rules to give it.
 Those rules are defined as JSON/options structures. You can add as many as you want, but the rules collection is locked down as a private variable and only accessible via methods. 
 
+## Notes
+
+Proposed new rule format:
+
+
+```TypeScript
+/*
+Two example rules for a proposed design that can use NPM packages
+
+The first one is functional and uses the validate() method to check the length of parameter names. Those parameter names are collected by the tree-sitter query in the @query annotation
+
+The second one is super simple. It uses the regex annotation to find any variable name that has the word "foo" in it. There is no other processing, so the vallidate() method is just a stub
+
+Rules can also inherit from each other, so they can share and chain funcitonality if needed.
+*/
+
+@name("Short param names")
+@tags("variables","parameters","readability")
+@context("scan")
+@message("Parameters must have names that are longer than three characters")
+@suggestion("To provide clarity to readers, cohsider being as descriptive as possible with variable names wihle remaining clear and concise.")
+@priority(1)
+@query("((formal_parameter) identifier @expression)")
+@regex(null)
+class ParameterTooShortRule extends ScanRule{
+
+    // There could also be other methods that shortcut things, like validateText
+    // This is a weird example, because I feel like this could easily be a parameterized rule with a spread argument
+    validateNode(node: SyntaxNode): boolean{
+        if( node.text.length < 4){
+            return false;
+        }
+        return true;
+    }
+}
+
+
+@name("Bad pattern")
+@tags("variables","readability")
+@context("scan")
+@message("The word foo is not allowed")
+@suggestion("Consider a better name.")
+@priority(1)
+@query("((variable_declarator) identifier @expression)")
+@regex("foo")
+class FooNotAllowed extends ScanRule{
+    // This is just a stub. The super returns true always
+}
+
+```
+
+Tree Sitter Builder...putting it down so I don't lose the thought
+```TypeScript
+
+// This is how I see the building for queries in a later rev:
+
+const variableDeclaration = new TreeSitterQueryBuilde("variable_eclarator");
+variableDeclaration
+    .thatHasChild("identifier")
+    .thenUnionWith("formal_parameter")
+    .thatHasChild("identifier")
+    .combine()
+    .thatMatchesPattern("[a-z]");
+
+```
