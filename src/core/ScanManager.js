@@ -2,6 +2,7 @@ import * as TreeSitter from "tree-sitter";
 import Violation from "./Violation";
 export default class ScanManager {
     constructor(parser, language, sourcePath, sourceCode, rules) {
+        parser.setLanguage(language);
         this._sourcePath = sourcePath;
         this._sourceCode = sourceCode;
         this._rules = rules;

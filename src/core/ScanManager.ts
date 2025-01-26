@@ -1,7 +1,6 @@
 import Parser, { Tree, SyntaxNode } from "tree-sitter";
 import * as TreeSitter from "tree-sitter";
 import Violation from "./Violation";
-import Rule from "../types/Rule";
 import { ScanRule } from "../rule/ScanRule";
 
 export default class ScanManager{
@@ -17,6 +16,7 @@ export default class ScanManager{
 
 
     constructor(parser: Parser, language: any,sourcePath: string, sourceCode: string, rules: Array<ScanRule>){
+        parser.setLanguage(language);
         this._sourcePath = sourcePath;
         this._sourceCode = sourceCode;
         this._rules = rules;

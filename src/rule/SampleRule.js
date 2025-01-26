@@ -5,9 +5,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { context, message, name, priority, query, regex, ScanRule, suggestion, category } from "./ScanRule";
-let FooNotAllowed = class FooNotAllowed extends ScanRule {
+let SampleRule = class SampleRule extends ScanRule {
 };
-FooNotAllowed = __decorate([
+SampleRule = __decorate([
     name("Bad pattern"),
     category("clarity"),
     context("scan"),
@@ -16,5 +16,6 @@ FooNotAllowed = __decorate([
     priority(1),
     query("((variable_declarator) identifier @expression)"),
     regex("foo")
-], FooNotAllowed);
+], SampleRule);
+export default SampleRule;
 //# sourceMappingURL=SampleRule.js.map
