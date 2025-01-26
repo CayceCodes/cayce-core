@@ -1,6 +1,6 @@
 {
   "name": "sourceloupe",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Static analysis using TypeScript",
   "main": "src/index.js",
   "scripts": {
