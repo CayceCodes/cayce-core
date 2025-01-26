@@ -1,46 +1,7 @@
-"use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || (function () {
-    var ownKeys = function(o) {
-        ownKeys = Object.getOwnPropertyNames || function (o) {
-            var ar = [];
-            for (var k in o) if (Object.prototype.hasOwnProperty.call(o, k)) ar[ar.length] = k;
-            return ar;
-        };
-        return ownKeys(o);
-    };
-    return function (mod) {
-        if (mod && mod.__esModule) return mod;
-        var result = {};
-        if (mod != null) for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
-        __setModuleDefault(result, mod);
-        return result;
-    };
-})();
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.DumpResult = void 0;
-var TreeSitter = __importStar(require("tree-sitter"));
-var Violation_1 = __importDefault(require("./Violation"));
-var ScanManager = /** @class */ (function () {
-    function ScanManager(parser, language, sourcePath, sourceCode, rules) {
+import * as TreeSitter from "tree-sitter";
+import Violation from "./Violation";
+export default class ScanManager {
+    constructor(parser, language, sourcePath, sourceCode, rules) {
         this._sourcePath = sourcePath;
         this._sourceCode = sourceCode;
         this._rules = rules;
@@ -53,32 +14,30 @@ var ScanManager = /** @class */ (function () {
      * a mini playground.
      * @param queryString A tree sitter query. Can be as simple or as complex as you want.
      */
-    ScanManager.prototype.dump = function (queryString) {
+    dump(queryString) {
         // Use dump as a mechanism to allow for ad-hoc ts queries?
-        var result = [];
+        const result = [];
         if (queryString === "") {
-            queryString = "(class_declaration @decl)";
+            queryString = `(class_declaration @decl)`;
         }
-        var query = new TreeSitter.Query(this._language, queryString);
-        var matches = query.matches(this._nodeTree.rootNode);
-        for (var _i = 0, matches_1 = matches; _i < matches_1.length; _i++) {
-            var match = matches_1[_i];
-            for (var _a = 0, _b = match.captures; _a < _b.length; _a++) {
-                var capture = _b[_a];
-                var dumpResult = new DumpResult(capture.node, this._sourceCode);
+        const query = new TreeSitter.Query(this._language, queryString);
+        const matches = query.matches(this._nodeTree.rootNode);
+        for (let match of matches) {
+            for (let capture of match.captures) {
+                const dumpResult = new DumpResult(capture.node, this._sourceCode);
                 result.push(dumpResult);
             }
         }
         console.log(JSON.stringify(result));
-    };
+    }
     /**
      * Scan is the scanner scannerific scantaculous main method for inspecting code for violations of given rules.
      * Rules are provided to the ScanManager from elsewhere.
      * @returns A map of cateogries->list of violations
      */
-    ScanManager.prototype.scan = function () {
+    scan() {
         return this._scan("scan");
-    };
+    }
     /**
      * Common scan method used by both scan and measure. Both were consolidated here as both essentially
      * did the same thing, just reported the results differently. Realizing that how the report is formatted
@@ -87,78 +46,64 @@ var ScanManager = /** @class */ (function () {
      * @returns `Map<string,Array<Violation>>` A map of category->array of violations. Allows for some
      * custom organization
      */
-    ScanManager.prototype._scan = function (context) {
-        var _this = this;
-        var tree = this._nodeTree;
+    _scan(context) {
+        const tree = this._nodeTree;
         if (this._rules === null || this._rules.length === 0) {
         }
-        var resultMap = new Map();
-        var _loop_1 = function (rule) {
-            if (!resultMap.has(rule.category)) {
-                resultMap.set(rule.category, []);
+        const resultMap = new Map();
+        for (let rule of this._rules) {
+            if (!resultMap.has(rule.Category)) {
+                resultMap.set(rule.Category, []);
             }
             // First the tree sitter query. :everage the built-in regex
-            if (!rule.context.includes(context)) {
-                return "continue";
+            if (!rule.Context.includes(context)) {
+                continue;
             }
-            var queryText = rule.query;
-            if (rule.regex != null) {
+            let queryText = rule.Query;
+            if (rule.RegEx != null) {
                 // Note that tree-sitter is persnickity about regular expressions.
                 // It's not that great about giving you feedback if the regex is gibbed.
                 // Including this here fragment because I know it works...it's just for reference
                 // (#match? @exp "^[a-zA-Z]{0,3}$")
-                var regExInsert = rule.regex == null ? "" : "(#match? @exp \"".concat(rule.regex, "\")");
+                const regExInsert = rule.RegEx == null ? "" : `(#match? @exp "${rule.RegEx}")`;
                 queryText += regExInsert;
             }
             try {
-                var query = new TreeSitter.Query(this_1._language, queryText);
-                var matches = query.matches(this_1._nodeTree.rootNode);
-                matches.forEach(function (match) {
-                    match.captures.forEach(function (capture) {
-                        var violationFlagged = true;
-                        // Now on to functions
-                        if (rule.scanFunction != null) {
-                            var queryFunction = rule.scanFunction;
-                            violationFlagged = queryFunction(capture.node);
-                        }
-                        if (violationFlagged) {
-                            var newViolation = new Violation_1.default(capture.node, rule, _this._sourcePath);
-                            resultMap[rule.category].push(newViolation);
+                const query = new TreeSitter.Query(this._language, queryText);
+                const matches = query.matches(this._nodeTree.rootNode);
+                matches.forEach(match => {
+                    match.captures.forEach(capture => {
+                        let isValid = false;
+                        isValid = rule.validate(capture.node);
+                        if (!isValid) {
+                            const newViolation = new Violation(capture.node, rule, this._sourcePath);
+                            resultMap[rule.Context].push(newViolation);
                         }
                     });
                 });
             }
             catch (treeSitterError) {
-                console.error("A tree-sitter query error occurred: ".concat(treeSitterError));
+                console.error(`A tree-sitter query error occurred: ${treeSitterError}`);
             }
-        };
-        var this_1 = this;
-        for (var _i = 0, _a = this._rules; _i < _a.length; _i++) {
-            var rule = _a[_i];
-            _loop_1(rule);
         }
         return resultMap;
-    };
-    ScanManager.prototype.measure = function (parser, language) {
+    }
+    measure(parser, language) {
         return this._scan("measure");
-    };
-    return ScanManager;
-}());
-exports.default = ScanManager;
+    }
+}
 /**
  * Simple object for containing information returned from a dump operation. Dump accepts
  * a  tree sitter query and spits back the requested source fragment to the console.
  */
-var DumpResult = /** @class */ (function () {
-    function DumpResult(node, source) {
+export class DumpResult {
+    constructor(node, source) {
         this.SourceFragment = source.substring(node.startIndex, node.endIndex);
         this.StartIndex = node.startIndex;
         this.EndIndex = node.endIndex;
     }
-    return DumpResult;
-}());
-exports.DumpResult = DumpResult;
-var RULE_REGISTRY = {
+}
+const RULE_REGISTRY = {
     "rules": [
         {
             "name": "Variables",
@@ -186,3 +131,4 @@ var RULE_REGISTRY = {
         }
     ]
 };
+//# sourceMappingURL=ScanManager.js.map

@@ -1,21 +1,18 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Violation class
  * Simple object for providing some structure and behavior to the rule on the subject of parsing
  */
-var Violation = /** @class */ (function () {
+export default class Violation {
     /**
      * constructor(...) Entry point for new objects.
      * @param node
      * @param rule
      * @param args
      */
-    function Violation(node, rule, filePath) {
+    constructor(node, rule, filePath) {
         this.Rule = rule;
         this.FilePath = filePath;
-        this.SourceSyntaxNode = node;
+        this.SourceNode = node;
     }
-    return Violation;
-}());
-exports.default = Violation;
+}
+//# sourceMappingURL=Violation.js.map

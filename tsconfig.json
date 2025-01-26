@@ -1,6 +1,15 @@
 {
     "compilerOptions": {
         "noEmit": false,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "module": "ES2020",
+        "target": "es6",
+        "lib": [ "es6" ],
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "moduleResolution": "Node",
+        "resolveJsonModule": true
+    
     }
 }

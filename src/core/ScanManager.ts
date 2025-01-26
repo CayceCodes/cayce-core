@@ -2,6 +2,7 @@ import Parser, { Tree, SyntaxNode } from "tree-sitter";
 import * as TreeSitter from "tree-sitter";
 import Violation from "./Violation";
 import Rule from "../types/Rule";
+import { ScanRule } from "../rule/ScanRule";
 
 export default class ScanManager{
 
@@ -9,13 +10,13 @@ export default class ScanManager{
     private _nodeTree: any;
     private _parser: Parser;
     private _language: any;
-    private _rules: Array<Rule>;
+    private _rules: Array<ScanRule>;
     private _sourcePath: string;
     private _sourceCode: string;
     private _violations: Map<string,Array<Violation>>;
 
 
-    constructor(parser: Parser, language: any,sourcePath: string, sourceCode: string, rules: Array<Rule>){
+    constructor(parser: Parser, language: any,sourcePath: string, sourceCode: string, rules: Array<ScanRule>){
         this._sourcePath = sourcePath;
         this._sourceCode = sourceCode;
         this._rules = rules;
@@ -69,22 +70,22 @@ export default class ScanManager{
         }
         const resultMap: Map<string,Array<Violation>> = new Map<string,Array<Violation>>();
         for(let rule of this._rules){
-            if(!resultMap.has(rule.category)){
-                resultMap.set(rule.category,[]);
+            if(!resultMap.has(rule.Category)){
+                resultMap.set(rule.Category,[]);
             }
             
             // First the tree sitter query. :everage the built-in regex
-            if(!rule.context.includes(context)){
+            if(!rule.Context.includes(context)){
                 continue;
             }
-            let queryText = rule.query;
-            if(rule.regex != null){
+            let queryText = rule.Query;
+            if(rule.RegEx != null){
                 // Note that tree-sitter is persnickity about regular expressions.
                 // It's not that great about giving you feedback if the regex is gibbed.
                 // Including this here fragment because I know it works...it's just for reference
                 // (#match? @exp "^[a-zA-Z]{0,3}$")
 
-                const regExInsert = rule.regex == null ? "" : `(#match? @exp "${rule.regex}")`;
+                const regExInsert = rule.RegEx == null ? "" : `(#match? @exp "${rule.RegEx}")`;
                 queryText += regExInsert;
             }
             try{
@@ -92,15 +93,11 @@ export default class ScanManager{
                 const matches: TreeSitter.QueryMatch[] = query.matches(this._nodeTree.rootNode);
                 matches.forEach(match=>{
                     match.captures.forEach(capture=>{
-                        let violationFlagged: boolean = true;
-                        // Now on to functions
-                        if(rule.scanFunction != null){
-                            const queryFunction = rule.scanFunction;
-                            violationFlagged = queryFunction(capture.node);
-                        }
-                        if(violationFlagged){
+                        let isValid: boolean = false;
+                        isValid = rule.validate(capture.node);
+                        if(!isValid){
                             const newViolation: Violation = new Violation(capture.node,rule,this._sourcePath);
-                            resultMap[rule.category].push(newViolation);
+                            resultMap[rule.Context].push(newViolation);
                         }
                     });
                 });

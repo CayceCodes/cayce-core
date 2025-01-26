@@ -1,13 +1,13 @@
 import { SyntaxNode } from "tree-sitter";
-import Rule from "../types/Rule";
+import { ScanRule } from "../rule/ScanRule";
 
 /**
  * Violation class
  * Simple object for providing some structure and behavior to the rule on the subject of parsing
  */
 export default class Violation{
-    Rule: Rule;
-    SourceSyntaxNode: SyntaxNode;
+    Rule: ScanRule;
+    SourceNode: SyntaxNode;
     FilePath: string;
 
     /**
@@ -16,10 +16,10 @@ export default class Violation{
      * @param rule 
      * @param args 
      */
-    constructor(node: SyntaxNode, rule: Rule, filePath: string){
+    constructor(node: SyntaxNode, rule: ScanRule, filePath: string){
         this.Rule = rule;
         this.FilePath = filePath;
-        this.SourceSyntaxNode = node;
+        this.SourceNode = node;
     }
 
 }
