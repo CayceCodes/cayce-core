@@ -11,24 +11,29 @@ export class ScanRunner{
     private _scanManager: ScanManager;
     private _parser: Parser;
     private _language: any;
+    private _overrideQuery: string;
     
-    constructor(sourcePath: string, sourceCode: string, rules: Array<ScanRule>, language?: any){
+    constructor(sourcePath: string, sourceCode: string, rules: Array<ScanRule>, overrideQuery: string, language?: any){
         this._parser = new Parser();
         this._parser.setLanguage(TsSfApex.apex);
         this._sourceCode = sourceCode;
         this._sourcePath = sourcePath;
         this._rules = rules;
         this._language = language ?? TsSfApex.apex;
+        this._overrideQuery = overrideQuery ?? "";
     }
 
     async execute(command: ScanCommand, queryOverride?: string){
         this._scanManager = new ScanManager(this._parser,this._language,this._sourcePath,this._sourceCode,this._rules);
         switch(command){
             case ScanCommand.DUMP:
+                return this._scanManager.dump(this._overrideQuery);
                 break;
             case ScanCommand.SCAN:
+                return this._scanManager.scan();
                 break;
             case ScanCommand.MEASURE:
+                return this._scanManager.measure();
                 break;
         }
     }

@@ -58,7 +58,7 @@ export default class ScanManager{
     }
     
 
-    async measure(parser: Parser, language: any):  Promise<Map<string, ScanResult[]>> {
+    async measure():  Promise<Map<string, ScanResult[]>> {
         return this._scan("measure");
     }
 
