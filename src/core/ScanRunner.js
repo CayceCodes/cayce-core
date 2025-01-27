@@ -10,24 +10,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import TsSfApex from "tree-sitter-sfapex";
 import ScanManager from "./ScanManager";
 import Parser from "tree-sitter";
-export class ScanRunner {
-    constructor(sourcePath, sourceCode, rules, language) {
+export default class ScanRunner {
+    constructor(sourcePath, sourceCode, rules, overrideQuery, language) {
         this._parser = new Parser();
         this._parser.setLanguage(TsSfApex.apex);
         this._sourceCode = sourceCode;
         this._sourcePath = sourcePath;
         this._rules = rules;
         this._language = language !== null && language !== void 0 ? language : TsSfApex.apex;
+        this._overrideQuery = overrideQuery !== null && overrideQuery !== void 0 ? overrideQuery : "";
     }
     execute(command, queryOverride) {
         return __awaiter(this, void 0, void 0, function* () {
             this._scanManager = new ScanManager(this._parser, this._language, this._sourcePath, this._sourceCode, this._rules);
             switch (command) {
                 case ScanCommand.DUMP:
+                    return this._scanManager.dump(this._overrideQuery);
                     break;
                 case ScanCommand.SCAN:
+                    return this._scanManager.scan();
                     break;
                 case ScanCommand.MEASURE:
+                    return this._scanManager.measure();
                     break;
             }
         });

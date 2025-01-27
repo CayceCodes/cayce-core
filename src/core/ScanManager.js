@@ -49,7 +49,7 @@ export default class ScanManager {
         }
         console.log(JSON.stringify(result));
     }
-    measure(parser, language) {
+    measure() {
         return __awaiter(this, void 0, void 0, function* () {
             return this._scan("measure");
         });
