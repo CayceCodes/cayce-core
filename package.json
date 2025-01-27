@@ -11,8 +11,8 @@
     "type": "git",
     "url": "git+https://github.com/justinstroudbah/sourceloupe.git"
   },
-  "author": "",
-  "license": "MIT",
+  "author": "Justin Stroud",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/justinstroudbah/sourceloupe/issues"
   },

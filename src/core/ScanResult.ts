@@ -5,7 +5,7 @@ import { ScanRule } from "../rule/ScanRule";
  * Violation class
  * Simple object for providing some structure and behavior to the rule on the subject of parsing
  */
-export default class Violation{
+export default class ScanResult{
     Rule: ScanRule;
     SourceNode: SyntaxNode;
     FilePath: string;
