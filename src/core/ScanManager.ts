@@ -1,7 +1,6 @@
 import Parser, { Tree, SyntaxNode } from "tree-sitter";
 import * as TreeSitter from "tree-sitter";
-import Violation from "./Violation";
-import Rule from "../types/Rule";
+import ScanResult from "./ScanResult";
 import { ScanRule } from "../rule/ScanRule";
 
 export default class ScanManager{
@@ -13,10 +12,21 @@ export default class ScanManager{
     private _rules: Array<ScanRule>;
     private _sourcePath: string;
     private _sourceCode: string;
-    private _violations: Map<string,Array<Violation>>;
+    private _violations: Map<string,Array<ScanResult>>;
 
+
+/*
+
+{
+  parser: "foo",
+  plugins: ["prettier-plugin-foo"],
+});
+
+
+ */
 
     constructor(parser: Parser, language: any,sourcePath: string, sourceCode: string, rules: Array<ScanRule>){
+        parser.setLanguage(language);
         this._sourcePath = sourcePath;
         this._sourceCode = sourceCode;
         this._rules = rules;
@@ -47,13 +57,19 @@ export default class ScanManager{
         console.log(JSON.stringify(result));
     }
     
+
+    async measure():  Promise<Map<string, ScanResult[]>> {
+        return this._scan("measure");
+    }
+
     /**
      * Scan is the scanner scannerific scantaculous main method for inspecting code for violations of given rules.
      * Rules are provided to the ScanManager from elsewhere.
+     * TODO: Convert to async. Refactor the private _scan method so that it iterates through a supplied set of rules invoked through a dynamic import
      * @returns A map of cateogries->list of violations
      */
-    scan():  Map<string,Array<Violation>>{
-        return this._scan("scan");
+    async scan():  Promise<Map<string, ScanResult[]>>{
+        return await this._scan("scan");
     }
 
     /**
@@ -61,14 +77,15 @@ export default class ScanManager{
      * did the same thing, just reported the results differently. Realizing that how the report is formatted
      * should be the purview of something other than the scanner, I moved that stuff out.
      * @param context What operational contecxt we are using. Scan or measure are currently supported.
-     * @returns `Map<string,Array<Violation>>` A map of category->array of violations. Allows for some
+     * @returns `Map<string,Array<ScanResult>>` A map of category->array of violations. Allows for some
      * custom organization
      */
-    private _scan(context: string):  Map<string,Array<Violation>>{
+    private async _scan(context: string):  Promise<Map<string, ScanResult[]>>{
         const tree = this._nodeTree;
         if(this._rules === null || this._rules.length === 0){
         }
-        const resultMap: Map<string,Array<Violation>> = new Map<string,Array<Violation>>();
+        const resultMap: Map<string,Array<ScanResult>> = new Map<string,Array<ScanResult>>();
+
         for(let rule of this._rules){
             if(!resultMap.has(rule.Category)){
                 resultMap.set(rule.Category,[]);
@@ -96,8 +113,8 @@ export default class ScanManager{
                         let isValid: boolean = false;
                         isValid = rule.validate(capture.node);
                         if(!isValid){
-                            const newViolation: Violation = new Violation(capture.node,rule,this._sourcePath);
-                            resultMap[rule.Context].push(newViolation);
+                            const newScanResult: ScanResult = new ScanResult(capture.node,rule,this._sourcePath);
+                            resultMap[rule.Context].push(newScanResult);
                         }
                     });
                 });
@@ -109,10 +126,6 @@ export default class ScanManager{
 
         }
         return resultMap;
-    }
-
-    measure(parser: Parser, language: any):  Map<string,Array<Violation>> {
-        return this._scan("measure");
     }
 }
 

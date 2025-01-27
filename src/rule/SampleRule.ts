@@ -8,6 +8,6 @@ import { context, message, name, priority, query, regex, ScanRule, suggestion, c
 @priority(1)
 @query("((variable_declarator) identifier @expression)")
 @regex("foo")
-class FooNotAllowed extends ScanRule{
+export default class SampleRule extends ScanRule{
     // This is just a stub. The super returns true always
 }

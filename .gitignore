@@ -1,3 +1,4 @@
 .sfdx/
 ./sourcery.exe
 ./sourceloupe
+node_modules/

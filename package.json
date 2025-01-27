@@ -1,6 +1,6 @@
 {
   "name": "sourceloupe",
-  "version": "0.0.5",
+  "version": "0.0.9",
   "description": "Static analysis using TypeScript",
   "main": "src/index.js",
   "scripts": {
@@ -11,8 +11,8 @@
     "type": "git",
     "url": "git+https://github.com/justinstroudbah/sourceloupe.git"
   },
-  "author": "",
-  "license": "MIT",
+  "author": "Justin Stroud",
+  "license": "ISC",
   "bugs": {
     "url": "https://github.com/justinstroudbah/sourceloupe/issues"
   },

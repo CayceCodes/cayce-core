@@ -1,7 +1,26 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import * as TreeSitter from "tree-sitter";
-import Violation from "./Violation";
+import ScanResult from "./ScanResult";
 export default class ScanManager {
+    /*
+    
+    {
+      parser: "foo",
+      plugins: ["prettier-plugin-foo"],
+    });
+    
+    
+     */
     constructor(parser, language, sourcePath, sourceCode, rules) {
+        parser.setLanguage(language);
         this._sourcePath = sourcePath;
         this._sourceCode = sourceCode;
         this._rules = rules;
@@ -30,66 +49,73 @@ export default class ScanManager {
         }
         console.log(JSON.stringify(result));
     }
+    measure() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this._scan("measure");
+        });
+    }
     /**
      * Scan is the scanner scannerific scantaculous main method for inspecting code for violations of given rules.
      * Rules are provided to the ScanManager from elsewhere.
+     * TODO: Convert to async. Refactor the private _scan method so that it iterates through a supplied set of rules invoked through a dynamic import
      * @returns A map of cateogries->list of violations
      */
     scan() {
-        return this._scan("scan");
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield this._scan("scan");
+        });
     }
     /**
      * Common scan method used by both scan and measure. Both were consolidated here as both essentially
      * did the same thing, just reported the results differently. Realizing that how the report is formatted
      * should be the purview of something other than the scanner, I moved that stuff out.
      * @param context What operational contecxt we are using. Scan or measure are currently supported.
-     * @returns `Map<string,Array<Violation>>` A map of category->array of violations. Allows for some
+     * @returns `Map<string,Array<ScanResult>>` A map of category->array of violations. Allows for some
      * custom organization
      */
     _scan(context) {
-        const tree = this._nodeTree;
-        if (this._rules === null || this._rules.length === 0) {
-        }
-        const resultMap = new Map();
-        for (let rule of this._rules) {
-            if (!resultMap.has(rule.Category)) {
-                resultMap.set(rule.Category, []);
+        return __awaiter(this, void 0, void 0, function* () {
+            const tree = this._nodeTree;
+            if (this._rules === null || this._rules.length === 0) {
             }
-            // First the tree sitter query. :everage the built-in regex
-            if (!rule.Context.includes(context)) {
-                continue;
-            }
-            let queryText = rule.Query;
-            if (rule.RegEx != null) {
-                // Note that tree-sitter is persnickity about regular expressions.
-                // It's not that great about giving you feedback if the regex is gibbed.
-                // Including this here fragment because I know it works...it's just for reference
-                // (#match? @exp "^[a-zA-Z]{0,3}$")
-                const regExInsert = rule.RegEx == null ? "" : `(#match? @exp "${rule.RegEx}")`;
-                queryText += regExInsert;
-            }
-            try {
-                const query = new TreeSitter.Query(this._language, queryText);
-                const matches = query.matches(this._nodeTree.rootNode);
-                matches.forEach(match => {
-                    match.captures.forEach(capture => {
-                        let isValid = false;
-                        isValid = rule.validate(capture.node);
-                        if (!isValid) {
-                            const newViolation = new Violation(capture.node, rule, this._sourcePath);
-                            resultMap[rule.Context].push(newViolation);
-                        }
+            const resultMap = new Map();
+            for (let rule of this._rules) {
+                if (!resultMap.has(rule.Category)) {
+                    resultMap.set(rule.Category, []);
+                }
+                // First the tree sitter query. :everage the built-in regex
+                if (!rule.Context.includes(context)) {
+                    continue;
+                }
+                let queryText = rule.Query;
+                if (rule.RegEx != null) {
+                    // Note that tree-sitter is persnickity about regular expressions.
+                    // It's not that great about giving you feedback if the regex is gibbed.
+                    // Including this here fragment because I know it works...it's just for reference
+                    // (#match? @exp "^[a-zA-Z]{0,3}$")
+                    const regExInsert = rule.RegEx == null ? "" : `(#match? @exp "${rule.RegEx}")`;
+                    queryText += regExInsert;
+                }
+                try {
+                    const query = new TreeSitter.Query(this._language, queryText);
+                    const matches = query.matches(this._nodeTree.rootNode);
+                    matches.forEach(match => {
+                        match.captures.forEach(capture => {
+                            let isValid = false;
+                            isValid = rule.validate(capture.node);
+                            if (!isValid) {
+                                const newScanResult = new ScanResult(capture.node, rule, this._sourcePath);
+                                resultMap[rule.Context].push(newScanResult);
+                            }
+                        });
                     });
-                });
+                }
+                catch (treeSitterError) {
+                    console.error(`A tree-sitter query error occurred: ${treeSitterError}`);
+                }
             }
-            catch (treeSitterError) {
-                console.error(`A tree-sitter query error occurred: ${treeSitterError}`);
-            }
-        }
-        return resultMap;
-    }
-    measure(parser, language) {
-        return this._scan("measure");
+            return resultMap;
+        });
     }
 }
 /**
