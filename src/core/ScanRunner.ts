@@ -3,7 +3,7 @@ import ScanManager from "./ScanManager";
 import Parser from "tree-sitter";
 import { ScanRule } from "../rule/ScanRule";
 
-export class ScanRunner{
+export default class ScanRunner{
     
     private _sourcePath: string;
     private _sourceCode: string;
