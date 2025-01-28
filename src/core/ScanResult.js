@@ -9,10 +9,16 @@ export default class ScanResult {
      * @param rule
      * @param args
      */
-    constructor(node, rule, filePath) {
+    constructor(sourceNode, rule, filePath, ...metaData) {
         this.Rule = rule;
         this.FilePath = filePath;
-        this.SourceNode = node;
+        this.SourceNode = sourceNode;
+        ;
+        this._metaData = metaData !== null && metaData !== void 0 ? metaData : [];
+        this.Message = this.Rule.Message;
+        for (let element of this._metaData) {
+            this.Message = this.Message.replace(`%${element[0]}%`, `${element[1]}`);
+        }
     }
 }
 //# sourceMappingURL=ScanResult.js.map
