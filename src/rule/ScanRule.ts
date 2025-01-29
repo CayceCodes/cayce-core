@@ -68,11 +68,15 @@ export abstract class ScanRule {
     RegEx: string;
     Context: string;
 
+    preFilter(node: SyntaxNode, sourceFilePath: string): boolean{
+        return true;
+    }
+
     validateMatches(matches: Array<any>): any{
         return [];
     }
 
-    validateTree(node: SyntaxNode): any{
+    validateTree(node: QueryMatch[]): any{
         return true;
     };
 

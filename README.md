@@ -123,3 +123,54 @@ variableDeclaration
     .thatMatchesPattern("[a-z]");
 
 ```
+
+# Query
+
+Description
+
+(parser_output
+  (block_comment) @exp
+  (#match? @exp "@description*")
+)
+
+(class_declaration 
+  name: (identifier) @class_name
+  (#match? @exp "VATEST?|[A-Z]{2,4})_[a-zA-Z0-9]*")
+)
+
+(modifiers
+  ((modifier )@mod )
+  (#match? @mod "abstract"))
+
+
+(interface_declaration
+  name: (identifier) @class_name
+  (#match? @exp "VATEST?|[A-Z]{2,4})_[a-zA-Z0-9]*")
+)
+
+
+
+
+
+        <properties>
+            <property
+                name="patternOuterClass"
+                description="Strongly typed regular expression. Validates that the outer class has a prefix indicating the 'namespace'."
+                value="(VATEST?|[A-Z]{2,4})_[a-zA-Z0-9]*" />
+            <property
+                name="patternTestClass"
+                description="Strongly typed regular expression. Validates that the outer class has a prefix indicating the 'namespace'."
+                value="(VATEST?|[A-Z]{2,4})_[a-zA-Z0-9]*" />
+            <property
+                name="patternAbstractClass"
+                description="Strongly typed regular expression. Validates that the abstract has a prefix indicating the 'namespace'."
+                value="(VATEST?|[A-Z]{2,4})_[a-zA-Z0-9]*" />
+            <property
+                name="patternInterface"
+                description="Strongly typed regular expression. Validates that the interface has a prefix indicating the 'namespace'."
+                value="(VATEST?|[A-Z]{2,4})_[a-zA-Z0-9]*" />
+            <property
+                name="patternInnerClass"
+                description="Strongly typed regular expression. Validates that the inner class has no prefix."
+                value="[A-Z][a-zA-Z0-9]*" />
+        </properties>
