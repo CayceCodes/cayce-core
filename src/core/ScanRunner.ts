@@ -1,3 +1,5 @@
+import * as fs from 'fs/promises';
+
 import TsSfApex from "tree-sitter-sfapex";
 import ScanManager from "./ScanManager";
 import Parser from "tree-sitter";
@@ -13,10 +15,9 @@ export default class ScanRunner{
     private _language: any;
     private _overrideQuery: string;
     
-    constructor(sourcePath: string, sourceCode: string, rules: Array<ScanRule>, overrideQuery: string, language?: any){
+    constructor(sourcePath: string, rules: Array<ScanRule>, overrideQuery: string, language?: any){
         this._parser = new Parser();
         this._parser.setLanguage(TsSfApex.apex);
-        this._sourceCode = sourceCode;
         this._sourcePath = sourcePath;
         this._rules = rules;
         this._language = language ?? TsSfApex.apex;
@@ -25,18 +26,28 @@ export default class ScanRunner{
 
     async execute(command: ScanCommand, queryOverride?: string){
         this._scanManager = new ScanManager(this._parser,this._language,this._sourcePath,this._sourceCode,this._rules);
+        this._sourceCode = await this.verifyAndReadFile(this._sourcePath);
         switch(command){
             case ScanCommand.DUMP:
                 return this._scanManager.dump(this._overrideQuery);
-                break;
             case ScanCommand.SCAN:
                 return this._scanManager.scan();
-                break;
             case ScanCommand.MEASURE:
                 return this._scanManager.measure();
-                break;
         }
     }
+
+    private async verifyAndReadFile(filePath: string): Promise<string>{
+        try {
+            await fs.access(filePath);
+            const contents = await fs.readFile(filePath, 'utf-8');
+            return contents.trim();
+        } catch (error) {
+            console.error(`Unable to open file at ${filePath}`);
+        }
+
+    }
+
 }
 
 export enum ScanCommand{
