@@ -20,13 +20,13 @@
   "homepage": "https://github.com/justinstroudbah/sourceloupe#readme",
   "dependencies": {
     "tree-sitter": "^0.21.0",
-    "tree-sitter-sfapex": "^2.3.0"
+    "tree-sitter-sfapex": "^2.4.0"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
-    "shx": "^0.3.3",
     "eslint": "^8",
     "eslint-config-prettier": "^9",
+    "shx": "^0.3.3",
     "ts-node": "^10",
     "typescript": "^5"
   },
