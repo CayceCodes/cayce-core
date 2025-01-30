@@ -9,7 +9,7 @@ import { ScanRule } from '../rule/ScanRule';
 import TsSfApex from 'tree-sitter-sfapex';
 import Parser from 'tree-sitter';
 
-interface ScannerOptions {
+export interface ScannerOptions {
     sourcePath: string;
     rules: Array<ScanRule>;
     overrideQuery?: string;
