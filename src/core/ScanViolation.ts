@@ -9,9 +9,6 @@ export default class ScanResult{
     Rule: ScanRule;
     SourceNode: SyntaxNode;
     FilePath: string;
-    Message: string;
-
-    _metaData: Array<any>;
 
     /**
      * constructor(...) Entry point for new objects.
@@ -19,20 +16,10 @@ export default class ScanResult{
      * @param rule 
      * @param args 
      */
-    constructor(sourceNode: SyntaxNode, rule: ScanRule, filePath: string, ...metaData: Array<any>){
+    constructor(node: SyntaxNode, rule: ScanRule, filePath: string){
         this.Rule = rule;
         this.FilePath = filePath;
-        this.SourceNode = sourceNode;;
-        this._metaData = metaData ?? [];
-        
-        this.Message = this.Rule.Message;
-
-        for(let element of this._metaData){
-            this.Message = this.Message.replace(`%${element[0]}%`,`${element[1]}`);
-        }
+        this.SourceNode = node;
     }
 
-
-
 }
-

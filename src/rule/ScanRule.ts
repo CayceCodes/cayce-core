@@ -49,9 +49,16 @@ export function context(context: string) {
     };
 }
 
+export function ruleType(ruleType: string){
+    return function (target: Function) {
+        target.prototype.RuleType = ruleType;
+    }
+}
+
 export abstract class ScanRule {
 
     Node: SyntaxNode;
+    RuleType: string;
     Message: string;
     Category: string;
     Priority: number;
@@ -61,7 +68,19 @@ export abstract class ScanRule {
     RegEx: string;
     Context: string;
 
-    validate(node: SyntaxNode){
+    preFilter(node: SyntaxNode, sourceFilePath: string): boolean{
+        return true;
+    }
+
+    validateMatches(matches: Array<any>): any{
+        return [];
+    }
+
+    validateTree(node: QueryMatch[]): any{
+        return true;
+    };
+
+    validate(node: SyntaxNode): any{
         return true;
     };
 
