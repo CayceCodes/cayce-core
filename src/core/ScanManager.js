@@ -99,16 +99,17 @@ export default class ScanManager {
                 try {
                     const query = new TreeSitter.Query(this._language, queryText);
                     const matches = query.matches(this._nodeTree.rootNode);
-                    matches.forEach(match => {
-                        match.captures.forEach(capture => {
-                            let isValid = false;
-                            isValid = rule.validate(capture.node);
-                            if (!isValid) {
-                                const newScanResult = new ScanResult(capture.node, rule, this._sourcePath);
-                                resultMap[rule.Context].push(newScanResult);
-                            }
+                    if (!rule.validateMatches(matches))
+                        matches.forEach(match => {
+                            match.captures.forEach(capture => {
+                                let isValid = false;
+                                isValid = rule.validate(capture.node);
+                                if (!isValid) {
+                                    const newScanResult = new ScanResult(capture.node, rule, this._sourcePath);
+                                    resultMap[rule.Context].push(newScanResult);
+                                }
+                            });
                         });
-                    });
                 }
                 catch (treeSitterError) {
                     console.error(`A tree-sitter query error occurred: ${treeSitterError}`);

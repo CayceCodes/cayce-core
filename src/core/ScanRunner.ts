@@ -13,7 +13,7 @@ export default class ScanRunner{
     private _language: any;
     private _overrideQuery: string;
     
-    constructor(sourcePath: string, sourceCode: string, rules: Array<ScanRule>, overrideQuery: string, language?: any){
+    constructor(sourcePath: string, sourceCode: string, rules: Array<ScanRule>, overrideQuery?: string, language?: any){
         this._parser = new Parser();
         this._parser.setLanguage(TsSfApex.apex);
         this._sourceCode = sourceCode;

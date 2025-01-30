@@ -38,7 +38,15 @@ export function context(context) {
         target.prototype.Context = context;
     };
 }
+export function ruleType(ruleType) {
+    return function (target) {
+        target.prototype.RuleType = ruleType;
+    };
+}
 export class ScanRule {
+    validateMatches(matches) {
+        return [];
+    }
     validate(node) {
         return true;
     }

@@ -108,6 +108,17 @@ export default class ScanManager{
             try{
                 const query : TreeSitter.Query = new TreeSitter.Query(this._language,queryText);
                 const matches: TreeSitter.QueryMatch[] = query.matches(this._nodeTree.rootNode);
+
+                if(rule.validateTree(matches).length > 0){
+                    const outerScanResult: ScanResult = new ScanResult(this._nodeTree.rootNode,rule,this._sourcePath);
+                    resultMap[rule.Context].push(outerScanResult);
+                }
+
+                
+                if(rule.validateMatches(matches).length > 0){
+                    const outerScanResult: ScanResult = new ScanResult(this._nodeTree.rootNode,rule,this._sourcePath);
+                    resultMap[rule.Context].push(outerScanResult);
+                }
                 matches.forEach(match=>{
                     match.captures.forEach(capture=>{
                         let isValid: boolean = false;
