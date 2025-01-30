@@ -2,3 +2,12 @@
 ./sourcery.exe
 ./sourceloupe
 node_modules/
+
+# Added by Illuminated Cloud
+.localdev/
+/IlluminatedCloud/
+/out/
+target/
+/.illuminatedCloud/
+**/tsconfig*.json
+**/*.tsbuildinfo

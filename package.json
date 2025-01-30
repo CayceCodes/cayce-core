@@ -4,6 +4,7 @@
   "description": "Static analysis using TypeScript",
   "main": "src/index.js",
   "scripts": {
+    "build": "shx rm -rf dist && tsc -b",
     "start": "node -r ts-node/register --env-file=.myenvfile index.ts",
     "loupe": "bun index.ts measure c:/repos/bah/va/team-3/ff/va-teams/force-app/main/default/classes"
   },
@@ -23,7 +24,11 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
-    "typescript": "^5.7.3"
+    "shx": "^0.3.3",
+    "eslint": "^8",
+    "eslint-config-prettier": "^9",
+    "ts-node": "^10",
+    "typescript": "^5"
   },
   "include": [
     "src/**/*"
