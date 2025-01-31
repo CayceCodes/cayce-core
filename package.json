@@ -1,6 +1,6 @@
 {
   "name": "sourceloupe",
-  "version": "0.0.18",
+  "version": "0.0.17",
   "description": "Static analysis using TypeScript and tree-sitter.",
   "main": "dist/index.js",
   "files": [
@@ -17,7 +17,7 @@
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags",
-    "releasePatch": "npm version patch && npm run version && git commit -m 'tree commit prior to release' && npm run build && npm publish",
+    "releasePatch": "npm version patch && npm run version && git add . && git commit -m \"tree commit prior to release\" && npm run build && npm publish",
     "start": "node -r ts-node/register --env-file=.myenvfile index.ts",
     "loupe": "bun index.ts measure c:/repos/bah/va/team-3/ff/va-teams/force-app/main/default/classes"
   },
