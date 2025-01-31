@@ -9,5 +9,5 @@ import { context, message, name, priority, query, regex, ScanRule, suggestion, c
 @query('((variable_declarator) identifier @expression)')
 @regex('foo')
 export class SampleRule extends ScanRule {
-  // This is just a stub. The super returns true always
+    // This is just a stub. The super returns true always
 }

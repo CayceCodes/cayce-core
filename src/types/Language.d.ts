@@ -3,6 +3,6 @@ import NodeType from './NodeType';
 import TsSfApex from 'tree-sitter-sfapex';
 
 export default interface Language extends TsSfApex.Language {
-  name: string;
-  nodeTypeInfo: NodeType[];
+    name: string;
+    nodeTypeInfo: NodeType[];
 }
