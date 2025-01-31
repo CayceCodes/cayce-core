@@ -7,7 +7,7 @@ export default class ScanManager {
   scan(): Map<string, Array<Violation>>;
   /**
    * @description Dump the results of a tree sitter query to the console
-   * @param queryString 
+   * @param queryString
    */
   dump(queryString: string);
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
