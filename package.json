@@ -1,6 +1,6 @@
 {
     "name": "sourceloupe",
-    "version": "0.0.20",
+    "version": "0.0.21",
     "description": "Static analysis using TypeScript and tree-sitter.",
     "main": "dist/index.js",
     "files": [
