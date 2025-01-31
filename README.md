@@ -34,12 +34,12 @@ As things take shape, some clear benefits are coming into focus. These benefits 
 
 The rules are stored (currently) in ./rules/RuleRegistry.ts. This will change, as it's probably nicer to allow a custom ruleset to be passed in. As long as the rules stay simple.
 
-```javascript
+```
 {
     "category":"variables",
     "name":"Some descriptive name",
     "message":"Tell the user what has been flagged, why it's been flagged, and how to fix it.",
-    "priority:1,
+    "priority":1,
     "query":"Tree sitter query for defining what we want to inspect.",
     "regex":"A regular expression that further refines the query.",
     "scanFunction":function(node){return node != null;}     // Anonymous function to run against the node
