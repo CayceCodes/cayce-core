@@ -1,7 +1,16 @@
+# SFDX
 .sfdx/
 ./sourcery.exe
 ./sourceloupe
+
+# This project
 node_modules/
+dist/
+coverage/
+*.log
+.DS_Store
+.env
+.env.*
 
 # Added by Illuminated Cloud
 .localdev/
