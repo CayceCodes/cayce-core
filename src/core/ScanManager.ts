@@ -2,13 +2,12 @@ import Parser, { SyntaxNode } from 'tree-sitter';
 import * as TreeSitter from 'tree-sitter';
 import ScanResult from './ScanResult';
 import { ScanRule } from '../rule/ScanRule';
+import Language from '../types/Language';
 
 export default class ScanManager {
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  private _nodeTree: any;
+  private _nodeTree: Parser.Tree;
   private _parser: Parser;
-  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  private _language: any;
+  private _language: Language;
   private _rules: Array<ScanRule>;
   private _sourcePath: string;
   private _sourceCode: string;
@@ -24,13 +23,13 @@ export default class ScanManager {
 
  */
   /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-  constructor(parser: Parser, language: any, sourcePath: string, sourceCode: string, rules: Array<ScanRule>) {
-    parser.setLanguage(language);
+  constructor(parser: Parser, language: Language, sourcePath: string, sourceCode: string, rules: Array<ScanRule>) {
     this._sourcePath = sourcePath;
     this._sourceCode = sourceCode;
     this._rules = rules;
     this._language = language;
     this._parser = parser;
+    this._parser.setLanguage(language);
     this._nodeTree = parser.parse(this._sourceCode);
   }
 
