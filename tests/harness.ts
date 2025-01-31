@@ -5,11 +5,10 @@
 
 // //constructor(parser: Parser, language: any,sourcePath: string, sourceCode: string, rules: Array<Rule>);
 
-
 // const source: string = `
 // public with sharing class TestHarnessApex{
 //     private String firstNameField = '';
-    
+
 //     public FirstName{
 //         get{
 //             return firstNameField;
@@ -27,8 +26,6 @@
 //     // {
 //     //     plugins: ["sampleloupe"],
 //     // }
-
-
 
 // const parser: Parser = new Parser();
 // const path: string = `C:\\repos\\sourceloupe\\tests\\`;

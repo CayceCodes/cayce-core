@@ -24,4 +24,3 @@
 // const parser: Parser = new Parser();
 // const path: string = `C:\\repos\\sourceloupe\\tests\\`;
 // const manager: ScanManager = new ScanManager(parser, TsSfApex.apex, path, source, ["sampleloupe"]);
-//# sourceMappingURL=harness.js.map
