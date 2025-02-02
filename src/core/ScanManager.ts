@@ -1,8 +1,8 @@
-import Parser, { SyntaxNode } from 'tree-sitter';
+import Parser, { QueryCapture, SyntaxNode } from 'tree-sitter';
 import * as TreeSitter from 'tree-sitter';
-import ScanResult from './ScanResult';
-import { ScanRule } from '../rule/ScanRule';
-import Language from '../types/Language';
+import ScanResult from './ScanResult.js';
+import { ScanRule } from '../rule/ScanRule.js';
+import Language from '../types/Language.js';
 
 export default class ScanManager {
     private _nodeTree: Parser.Tree;
@@ -11,18 +11,7 @@ export default class ScanManager {
     private _rules: Array<ScanRule>;
     private _sourcePath: string;
     private _sourceCode: string;
-    // private _violations: Map<string, Array<ScanResult>> = new Map<string, Array<ScanResult>>();
 
-    /*
-
-{
-  parser: "foo",
-  plugins: ["prettier-plugin-foo"],
-});
-
-
- */
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     constructor(parser: Parser, language: Language, sourcePath: string, sourceCode: string, rules: Array<ScanRule>) {
         this._sourcePath = sourcePath;
         this._sourceCode = sourceCode;
@@ -37,22 +26,20 @@ export default class ScanManager {
      * Dump is here as a way to quickly test out new rules without having to create them. It's basically
      * a mini playground.
      * @param queryString A tree sitter query. Can be as simple or as complex as you want.
+     * @returns `string` The actual source fragment(s) selected by the query, identified in the matches collection, and stored in the captures collection under that.
      */
-    dump(queryString: string): void {
+    dump(queryString: string): string {
         // Use dump as a mechanism to allow for ad-hoc ts queries?
-        const result: Array<DumpResult> = [];
+        const result: Array<string> = [];
         if (queryString === '') {
             queryString = `(class_declaration @decl)`;
         }
         const query: TreeSitter.Query = new TreeSitter.Query(this._language, queryString);
-        const matches: TreeSitter.QueryMatch[] = query.matches(this._nodeTree.rootNode);
-        for (const match of matches) {
-            for (const capture of match.captures) {
-                const dumpResult: DumpResult = new DumpResult(capture.node, this._sourceCode);
-                result.push(dumpResult);
-            }
-        }
-        console.log(JSON.stringify(result));
+        const globalCaptures: QueryCapture[] = query.captures(this._nodeTree.rootNode);
+        globalCaptures.forEach((capture) => {
+            result.push(`@${capture.name}=${capture.node.text}`);
+        });
+        return JSON.stringify(result);
     }
 
     async measure(): Promise<Map<string, ScanResult[]>> {
@@ -105,7 +92,6 @@ export default class ScanManager {
             try {
                 const query: TreeSitter.Query = new TreeSitter.Query(this._language, queryText);
                 const matches: TreeSitter.QueryMatch[] = query.matches(this._nodeTree.rootNode);
-
                 if (rule.validateTree(matches).length > 0) {
                     const outerScanResult: ScanResult = new ScanResult(this._nodeTree.rootNode, rule, this._sourcePath);
                     resultMap.get(rule.Context)?.push(outerScanResult);

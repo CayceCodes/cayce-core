@@ -69,6 +69,8 @@ export abstract class ScanRule {
     RegEx!: string;
     Context!: string;
 
+    constructor() {}
+
     /**
      * preFilter(...) As yet unused. This is a hook for filtering out nodes before they are processed.
      * @param _node

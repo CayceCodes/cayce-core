@@ -2,13 +2,14 @@
 import * as fs from 'node:fs/promises';
 
 // Local imports
-import ScanManager from './ScanManager';
-import { ScanRule } from '../rule/ScanRule';
+import ScanManager from './ScanManager.js';
+import { ScanRule } from '../rule/ScanRule.js';
 
 // Third party imports
 import TsSfApex from 'tree-sitter-sfapex';
 import Parser from 'tree-sitter';
-import ScanResult from './ScanResult';
+import ScanResult from './ScanResult.js';
+import { SampleRule } from '../rule/SampleRule.js';
 
 export interface ScannerOptions {
     sourcePath: string;
@@ -54,8 +55,12 @@ export default class Scanner {
         return await this.scanManager.scan();
     }
 
-    public async debug(): Promise<void> {
-        return this.scanManager.dump(this.overrideQuery);
+    public static async debug(overrideQuery: string, sourceCode: string): Promise<string> {
+        const scanManager: ScanManager = new ScanManager(new Parser(), TsSfApex.apex, 'foo', sourceCode, [
+            new SampleRule(),
+        ]);
+
+        return scanManager.dump(overrideQuery);
     }
 
     public async measure(): Promise<Map<string, ScanResult[]>> {
