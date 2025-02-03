@@ -18,5 +18,4 @@ coverage/
 /out/
 target/
 /.illuminatedCloud/
-**/tsconfig*.json
 **/*.tsbuildinfo
