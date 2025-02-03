@@ -1,6 +1,6 @@
 import Parser, { QueryCapture, SyntaxNode } from 'tree-sitter';
 import * as TreeSitter from 'tree-sitter';
-import ScanResult from './ScanResult.js';
+import ScanResult, { ResultType } from '../results/ScanResult';
 import { ScanRule } from '../rule/ScanRule.js';
 import Language from '../types/Language.js';
 
@@ -71,6 +71,10 @@ export default class ScanManager {
         const resultMap: Map<string, Array<ScanResult>> = new Map<string, Array<ScanResult>>();
 
         for (const rule of this._rules) {
+            let type: ResultType = rule.Priority;
+            if (rule.Priority > ResultType.VIOLATION) {
+                type = ResultType.VIOLATION;
+            }
             if (!resultMap.has(rule.Category)) {
                 resultMap.set(rule.Category, []);
             }
@@ -93,19 +97,21 @@ export default class ScanManager {
                 const query: TreeSitter.Query = new TreeSitter.Query(this._language, queryText);
                 const matches: TreeSitter.QueryMatch[] = query.matches(this._nodeTree.rootNode);
                 if (rule.validateTree(matches).length > 0) {
-                    const outerScanResult: ScanResult = new ScanResult(this._nodeTree.rootNode, rule, this._sourcePath);
-                    resultMap.get(rule.Context)?.push(outerScanResult);
+                    rule.Node = this._nodeTree.rootNode;
+                    const treeScanResult: ScanResult = new ScanResult(rule, this._sourceCode, type);
+                    resultMap.get(rule.Context)?.push(treeScanResult);
                 }
 
                 if (rule.validateMatches(matches).length > 0) {
-                    const outerScanResult: ScanResult = new ScanResult(this._nodeTree.rootNode, rule, this._sourcePath);
+                    rule.Node = this._nodeTree.rootNode;
+                    const outerScanResult: ScanResult = new ScanResult(rule, this._sourceCode, type);
                     resultMap.get(rule.Context)?.push(outerScanResult);
                 }
                 matches.forEach((match) => {
                     match.captures.forEach((capture) => {
                         const isValid = rule.validate(capture.node);
                         if (!isValid) {
-                            const newScanResult: ScanResult = new ScanResult(capture.node, rule, this._sourcePath);
+                            const newScanResult: ScanResult = new ScanResult(rule, this._sourceCode, type);
                             resultMap.get(rule.Context)?.push(newScanResult);
                         }
                     });

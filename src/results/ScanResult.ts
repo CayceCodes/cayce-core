@@ -1,37 +1,41 @@
 import { SyntaxNode } from 'tree-sitter';
 import { ScanRule } from '../rule/ScanRule';
+import SourceFragment from './SourceFragment';
 
 /**
- * Violation class
- * Simple object for providing some structure and behavior to the rule on the subject of parsing
+ * @description ScanResult class is used to store various bits of information about a violation or message returned by a scan
  */
 export default class ScanResult {
-    Rule: ScanRule;
-    SourceNode: SyntaxNode;
-    FilePath: string;
-    Message: string;
-
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    _metaData: Array<any>;
+    readonly Rule: ScanRule;
+    readonly Fragment: SourceFragment;
+    readonly SourceNode: SyntaxNode;
+    readonly SourceCode: string;
+    private _metadata: Array<string>;
+    readonly Type: ResultType;
 
     /**
-     * constructor
+     * constructor Doesn't do anything special other than initialize the various fields
      * @param sourceNode
      * @param rule
      * @param filePath
      * @param metaData
      */
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    constructor(sourceNode: SyntaxNode, rule: ScanRule, filePath: string, ...metaData: Array<any>) {
+    constructor(rule: ScanRule, sourceCode: string, resultType: ResultType, metadata?: Array<string>) {
+        this.SourceNode = rule.Node;
         this.Rule = rule;
-        this.FilePath = filePath;
-        this.SourceNode = sourceNode;
-        this._metaData = metaData ?? [];
+        this.Type = resultType;
+        this.SourceCode = sourceCode;
+        this.Fragment = new SourceFragment(rule.Node, this.SourceCode);
+        this._metadata = metadata ?? [];
 
-        this.Message = this.Rule.Message;
-
-        for (const element of this._metaData) {
-            this.Message = this.Message.replace(`%${element[0]}%`, `${element[1]}`);
+        for (const element of this._metadata) {
+            this.Rule.Message = this.Rule.Message.replace(`%${element[0]}%`, `${element[1]}`);
         }
     }
+}
+
+export enum ResultType {
+    INFORMATION,
+    WARNING,
+    VIOLATION,
 }

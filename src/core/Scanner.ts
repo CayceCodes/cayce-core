@@ -8,7 +8,7 @@ import { ScanRule } from '../rule/ScanRule.js';
 // Third party imports
 import TsSfApex from 'tree-sitter-sfapex';
 import Parser from 'tree-sitter';
-import ScanResult from './ScanResult.js';
+import ScanResult from '../results/ScanResult';
 import { SampleRule } from '../rule/SampleRule.js';
 
 export interface ScannerOptions {
