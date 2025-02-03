@@ -1,4 +1,5 @@
 import { QueryMatch, SyntaxNode } from 'tree-sitter';
+import ScanResult from '../results/ScanResult';
 
 // type alias to restrict Function to something that returns a ScanRule
 type ScanRuleConstructor = abstract new () => ScanRule;
@@ -76,18 +77,18 @@ export abstract class ScanRule {
      * @param _node
      * @param _sourceFilePath
      */
-    preFilter(_node: SyntaxNode, _sourceFilePath: string): boolean {
-        return true;
-    }
-
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    validateMatches(_matches: Array<any>): any {
+    preFilter(_node: SyntaxNode, _sourceFilePath: string): ScanResult[] {
         return [];
     }
 
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    validateTree(_node: QueryMatch[]): any {
-        return true;
+    validateMatches(_matches: Array<any>): ScanResult[] {
+        return [];
+    }
+
+    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+    validateTree(_node: QueryMatch[]): ScanResult[] {
+        return [];
     }
 
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
