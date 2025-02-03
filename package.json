@@ -4,6 +4,7 @@
     "type": "module",
     "description": "Static analysis using TypeScript and tree-sitter.",
     "main": "dist/index.js",
+    "type": "module",
     "files": [
         "dist"
     ],
