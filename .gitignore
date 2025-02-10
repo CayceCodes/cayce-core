@@ -19,3 +19,4 @@ coverage/
 target/
 /.illuminatedCloud/
 **/*.tsbuildinfo
+src/harness.ts

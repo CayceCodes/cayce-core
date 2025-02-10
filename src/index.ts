@@ -7,6 +7,3 @@ import { ScanRule } from './rule/ScanRule';
 
 export { ScanManager, ScanRule, Scanner };
 export type { ScannerOptions };
-
-// declare module 'sourceloupe' {
-// }
