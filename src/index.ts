@@ -1,6 +1,12 @@
+// index.ts
+
 import ScanManager from './core/ScanManager';
-import Scanner, { ScannerOptions } from './core/Scanner';
-import Violation from './core/Violation';
+import Scanner from './core/Scanner';
+import { ScannerOptions } from './core/Scanner';
 import { ScanRule } from './rule/ScanRule';
 
-export { ScanManager, ScanRule, Scanner, ScannerOptions, Violation };
+export { ScanManager, ScanRule, Scanner };
+export type { ScannerOptions };
+
+// declare module 'sourceloupe' {
+// }

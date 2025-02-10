@@ -1,6 +1,6 @@
 <component name="ProjectCodeStyleConfiguration">
   <code_scheme name="Project" version="173">
-    <option name="LINE_SEPARATOR" value="&#13;&#10;" />
+    <option name="LINE_SEPARATOR" value="&#10;" />
     <ApexCodeStyleSettings>
       <option name="ALIGN_MULTILINE_COMPOSITE_EXPRESSIONS" value="true" />
       <option name="USAGE_CASE_APEX_CHANGE_CASE_WHEN_FORMATTING" value="true" />
