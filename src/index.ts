@@ -4,5 +4,9 @@ import ScanResult from './results/ScanResult';
 import SourceFragment from './results/SourceFragment';
 import { ResultType } from './results/ScanResult';
 import { ScanRule } from './rule/ScanRule';
+import TsSfApex from 'tree-sitter-sfapex';
 
-export { ScanManager, SourceFragment, ResultType, ScanRule, Scanner, ScannerOptions, ScanResult };
+// eslint-disable-next-line @typescript-eslint/no-namespace, @typescript-eslint/no-unused-vars
+declare namespace Sourceloupe {
+    export { TsSfApex, ScanManager, Scanner, SourceFragment, ResultType, ScanRule, ScannerOptions, ScanResult };
+}

@@ -3,6 +3,7 @@ import * as TreeSitter from 'tree-sitter';
 import ScanResult, { ResultType } from '../results/ScanResult';
 import { ScanRule } from '../rule/ScanRule.js';
 import Language from '../types/Language.js';
+import TsSfApex from 'tree-sitter-sfapex';
 
 export default class ScanManager {
     private _nodeTree: Parser.Tree;
@@ -19,7 +20,7 @@ export default class ScanManager {
      * @param rules A list of objects that extend the ScanRule class
      */
 
-    constructor(parser: Parser, language: Language, sourceCode: string, rules: Array<ScanRule>) {
+    constructor(parser: Parser, language: any, sourceCode: string, rules: Array<ScanRule>) {
         this._sourceCode = sourceCode;
         this._rules = rules;
         this._language = language;
@@ -36,16 +37,27 @@ export default class ScanManager {
      */
     dump(queryString: string): string {
         // Use dump as a mechanism to allow for ad-hoc ts queries?
-        const result: Array<string> = [];
         if (queryString === '') {
-            queryString = `(class_declaration @decl)`;
+            queryString = `(parser_output(block_comment)@exp)`;
         }
-        const query: TreeSitter.Query = new TreeSitter.Query(this._language, queryString);
+        const result: Array<string> = [];
+        const query: TreeSitter.Query = new TreeSitter.Query(TsSfApex.apex, queryString);
         const globalCaptures: QueryCapture[] = query.captures(this._nodeTree.rootNode);
         globalCaptures.forEach((capture) => {
-            result.push(`@${capture.name}=${capture.node.text}`);
+            result.push(`
+FIELD:
+@${capture.name}
+SOURCE:
+${capture.node.text}
+START POSITION:
+${JSON.stringify(capture.node.startPosition)}
+END POSITION:
+${JSON.stringify(capture.node.endPosition)}`);
         });
-        return JSON.stringify(result);
+        result.push(`
+TOTAL CAPTURES:
+${globalCaptures.length}`);
+        return result.join(`\\n`);
     }
 
     /**
