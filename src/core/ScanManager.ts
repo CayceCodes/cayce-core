@@ -9,11 +9,17 @@ export default class ScanManager {
     private _parser: Parser;
     private _language: Language;
     private _rules: Array<ScanRule>;
-    private _sourcePath: string;
     private _sourceCode: string;
 
-    constructor(parser: Parser, language: Language, sourcePath: string, sourceCode: string, rules: Array<ScanRule>) {
-        this._sourcePath = sourcePath;
+    /**
+     * @description This just assigns the various class fields and is used to initialize the parser object with the appropriate language and source to be scanned
+     * @param parser Tree sitter parser
+     * @param language Grammar we will be using as a Tree Sitter language
+     * @param sourceCode The raw source to be scanned
+     * @param rules A list of objects that extend the ScanRule class
+     */
+
+    constructor(parser: Parser, language: Language, sourceCode: string, rules: Array<ScanRule>) {
         this._sourceCode = sourceCode;
         this._rules = rules;
         this._language = language;
@@ -42,6 +48,10 @@ export default class ScanManager {
         return JSON.stringify(result);
     }
 
+    /**
+     * @description A "measure" type scan is generally informational and is tailored towards reporting use cases. This allows for things similar to what CLOC (count lines of code) does
+     * @returns  Scan results, as an array of `ScanResult`
+     */
     async measure(): Promise<Map<string, ScanResult[]>> {
         return this._scan('measure');
     }
@@ -109,7 +119,8 @@ export default class ScanManager {
                 }
                 matches.forEach((match) => {
                     match.captures.forEach((capture) => {
-                        const isValid = rule.validate(capture.node);
+                        const captureNode: SyntaxNode = capture.node;
+                        const isValid = rule.validate(captureNode);
                         if (!isValid) {
                             const newScanResult: ScanResult = new ScanResult(rule, this._sourceCode, type);
                             resultMap.get(rule.Context)?.push(newScanResult);
@@ -123,51 +134,3 @@ export default class ScanManager {
         return resultMap;
     }
 }
-
-/**
- * Simple object for containing information returned from a dump operation. Dump accepts
- * a  tree sitter query and spits back the requested source fragment to the console.
- */
-export class DumpResult {
-    SourceFragment: string;
-    StartIndex: number;
-    EndIndex: number;
-
-    constructor(node: SyntaxNode, source: string) {
-        this.SourceFragment = source.substring(node.startIndex, node.endIndex);
-        this.StartIndex = node.startIndex;
-        this.EndIndex = node.endIndex;
-    }
-}
-
-// const RULE_REGISTRY = {
-//   rules: [
-//     {
-//       name: 'Variables',
-//       queries: [
-//         {
-//           name: 'Total',
-//           context: 'measure',
-//           message: 'This is the total number of variable declarations, not counting method arguments.',
-//           query: '(variable_declarator (identifier) @exp)',
-//         },
-//         {
-//           name: 'Length < 3',
-//           context: 'scan,measure',
-//           message: 'Variables should be descriptive, clear, and concise with names over three characters long.',
-//           query: '(variable_declarator (identifier) @exp)',
-//           function: function (node) {
-//             return node.text.length > 3;
-//           },
-//         },
-//         {
-//           name: 'Trivial RegEx',
-//           context: 'scan,measure',
-//           message: 'A trivial RegEx (for testing) has produced some matches.',
-//           query: '(variable_declarator (identifier) @exp)',
-//           pattern: 'foo_[a-zA-Z0-9]*',
-//         },
-//       ],
-//     },
-//   ],
-// };

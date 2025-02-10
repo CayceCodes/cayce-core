@@ -48,7 +48,7 @@ export default class Scanner {
         this.overrideQuery = options.overrideQuery ?? '';
         this.parser = new Parser();
         this.language = TsSfApex.apex;
-        this.scanManager = new ScanManager(this.parser, this.language, this.sourcePath, this.sourceCode, this.rules);
+        this.scanManager = new ScanManager(this.parser, this.language, this.sourceCode, this.rules);
     }
 
     public async run(): Promise<Map<string, ScanResult[]>> {
@@ -56,10 +56,7 @@ export default class Scanner {
     }
 
     public static async debug(overrideQuery: string, sourceCode: string): Promise<string> {
-        const scanManager: ScanManager = new ScanManager(new Parser(), TsSfApex.apex, 'foo', sourceCode, [
-            new SampleRule(),
-        ]);
-
+        const scanManager: ScanManager = new ScanManager(new Parser(), TsSfApex.apex, sourceCode, [new SampleRule()]);
         return scanManager.dump(overrideQuery);
     }
 
