@@ -7,7 +7,7 @@
     "files": [
         "dist"
     ],
-    "types": "dist/types/index.d.ts",
+    "types": "dist/index.d.ts",
     "scripts": {
         "build": "shx rm -rf dist && tsc -b",
         "test": "jest",
@@ -64,5 +64,11 @@
         "node_modules",
         "tests",
         "src/__tests__"
-    ]
+    ],
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    }
 }
