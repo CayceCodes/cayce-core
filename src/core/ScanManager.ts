@@ -5,7 +5,6 @@ import { ScanRule } from '../rule/ScanRule.js';
 import Language from '../types/Language.js';
 
 type ScannerResult = Map<string, ScanResult[]>;
-type ScanContext = 'scan' | 'measure';
 
 export default class ScanManager {
     private treeSitterNodeTree: Parser.Tree;
