@@ -114,7 +114,9 @@ export default class ScanManager {
                 const filteredRoot: SyntaxNode = rule.preFilter(this.treeSitterNodeTree.rootNode);
                 // Prettier reformats this into a blatant syntax error
                 // eslint-disable-next-line prettier/prettier
-                const captures: QueryCapture[] = new TreeSitter.Query(this.treeSitterLanguage, queryText).captures(filteredRoot);                
+                const captures: QueryCapture[] = new TreeSitter.Query(this.treeSitterLanguage, queryText).captures(
+                    filteredRoot
+                );
                 // Just the nodes for the following function overrides
                 const capturedNodes: SyntaxNode[] = captures.map((captureInstance) => {
                     return captureInstance.node;
