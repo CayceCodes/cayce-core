@@ -21,11 +21,11 @@
         "strict": true,
         "target": "es2022",
         "typeRoots": ["./node_modules/@types", "./src/types"],
-        "types": ["node", "jest"],
+        "types": ["node", "jest"]
     },
     "exclude": ["node_modules", "dist", "jest.config.ts", "src/__tests__/**/*"],
     "include": ["src/**/*", "src/index.ts"],
     "ts-node": {
-        "esm": true,
+        "esm": true
     }
 }
