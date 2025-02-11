@@ -1,9 +1,6 @@
 import { SyntaxNode } from 'tree-sitter';
 import { ScanRule } from '../rule/ScanRule';
 import SourceFragment from './SourceFragment';
-import { createDecipheriv } from 'node:crypto';
-
-
 
 export abstract class ScanMetric {
     Result: ResultType;
