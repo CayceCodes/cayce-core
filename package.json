@@ -10,7 +10,7 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "shx rm -rf dist && tsc -b",
-        "test": "jest",
+        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
         "lint": "eslint . --ext .ts",
         "format": "prettier --write \"**/*.{ts,json,md}\"",
         "prepare": "npm run build",
