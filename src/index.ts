@@ -8,5 +8,5 @@ import Langauge from './types/Language';
 import { context, message, name, priority, query, regex, suggestion, category } from './rule/ScanRule';
 
 export { ScanRule, Scanner, ScanResult };
-export { context, message, name, priority, query, regex, suggestion, category }
+export { context, message, name, priority, query, regex, suggestion, category };
 export type { ScannerOptions, ResultType, Langauge };
