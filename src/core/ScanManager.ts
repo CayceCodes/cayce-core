@@ -64,10 +64,10 @@ export default class ScanManager {
     }
 
     /**
-     * Scan is the scanner scannerific scantaculous main method for inspecting code for violations of given rules.
+     * Scan is the scanner main method for inspecting code for violations of given rules.
      * Rules are provided to the ScanManager from elsewhere.
      * TODO: Refactor the private commonScan method so that it iterates through a supplied set of rules invoked through a dynamic import
-     * @returns A map of cateogries->list of violations
+     * @returns A map of categories->list of violations
      */
     async scan(): Promise<ScannerResult> {
         return await this.commonScan('scan');
@@ -75,7 +75,7 @@ export default class ScanManager {
 
     /**
      * This method is used to initialize the scanner result map. It is used to store the results of the scan.
-     * This prevents us from if/elsing on whether a category exists in the map.
+     * This prevents us from if/els-ing on whether a category exists in the map.
      * @returns `Map<string, Array<ScanResult>>` A map of category->array of violations. Allows for some
      * @private
      */
@@ -93,7 +93,7 @@ export default class ScanManager {
      * Common scan method used by both scan and measure. Both were consolidated here as both essentially
      * did the same thing, just reported the results differently. Realizing that how the report is formatted
      * should be the purview of something other than the scanner, I moved that stuff out.
-     * @param context What operational contecxt we are using. Scan or measure are currently supported.
+     * @param context What operational context we are using. Scan or measure are currently supported.
      * @returns `Map<string, Array<ScanResult>>` A map of category->array of violations. Allows for some
      * custom organization
      */
