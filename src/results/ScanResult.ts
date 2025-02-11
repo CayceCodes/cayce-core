@@ -7,13 +7,12 @@ export abstract class ScanMetric {
     SourceNode: SyntaxNode;
     Rule: ScanRule;
 
-    constructor(createdByRule: ScanRule){
+    constructor(createdByRule: ScanRule) {
         this.Result = createdByRule.ResultType;
         this.SourceNode = createdByRule.Node;
         this.Rule = createdByRule;
     }
 }
-
 
 /**
  * @description ScanResult class is used to encapsulate various bits of information about a violation or message returned by a scan
@@ -47,16 +46,15 @@ export default class ScanResult implements ScanMetric {
     }
 }
 
-export class ScanMeasure extends ScanMetric{
+export class ScanMeasure extends ScanMetric {
     MeasurementType: ResultType;
     Children: [];
 
-    constructor(createdByRule: ScanRule){
-        super(createdByRule)
+    constructor(createdByRule: ScanRule) {
+        super(createdByRule);
         this.Children = [];
         this.MeasurementType = createdByRule.ResultType;
     }
-
 }
 
 /**
