@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { SyntaxNode } from 'tree-sitter';
-import ScanResult, { ResultType } from '../results/ScanResult';
 import { context, message, name, priority, query, regex, suggestion, category } from './ScanRule';
 import { ScanRule } from './ScanRule';
+import ScanResult, { ResultType } from '../results/ScanResult';
 
 @name('Check for description in the class header comment')
 @category('clarity')
@@ -13,7 +14,7 @@ import { ScanRule } from './ScanRule';
 @priority(1)
 @query('(method_declaration (identifier)@a)')
 @regex('')
-export class ExampleRule extends ScanRule {
+export class ExampleValidateOverrideRule extends ScanRule {
     validateNode(node: SyntaxNode): ScanResult[] {
         const resultList: ScanResult[] = [];
         if (node.text.length < 4) {
