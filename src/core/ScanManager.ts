@@ -141,10 +141,4 @@ export default class ScanManager {
         }
         return resultMap;
     }
-
-    private addScanResult(rule: ScanRule, normalizedPriority: ResultType, resultMap: Map<string, ScanResult[]>): void {
-        rule.Node = this.treeSitterNodeTree.rootNode;
-        const treeScanResult: ScanResult = new ScanResult(rule, this.sourceCodeToScan, normalizedPriority);
-        resultMap.get(rule.Context)?.push(treeScanResult);
-    }
 }

@@ -10,7 +10,7 @@ export default class ScanResult {
     readonly Fragment: SourceFragment;
     readonly SourceNode: SyntaxNode;
     readonly SourceCode: string;
-    private _metadata: Array<string>;
+    private metadata: Array<string>;
     readonly Type: ResultType;
 
     /**
@@ -20,15 +20,15 @@ export default class ScanResult {
      * @param filePath
      * @param metaData
      */
-    constructor(rule: ScanRule, sourceCode: string, resultType: ResultType, metadata?: Array<string>) {
+    constructor(rule: ScanRule, resultType: ResultType, metadata?: Array<string>) {
         this.SourceNode = rule.Node;
+        this.SourceCode = rule.SourceCode;
         this.Rule = rule;
         this.Type = resultType;
-        this.SourceCode = sourceCode;
         this.Fragment = new SourceFragment(rule.Node, this.SourceCode);
-        this._metadata = metadata ?? [];
+        this.metadata = metadata ?? [];
 
-        for (const element of this._metadata) {
+        for (const element of this.metadata) {
             this.Rule.Message = this.Rule.Message.replace(`%${element[0]}%`, `${element[1]}`);
         }
     }

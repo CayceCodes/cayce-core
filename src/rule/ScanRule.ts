@@ -3,7 +3,7 @@ import { SyntaxNode } from 'tree-sitter';
 import ScanResult from '../results/ScanResult';
 
 // type alias to restrict Function to something that returns a ScanRule
-type ScanRuleConstructor = abstract new () => ScanRule;
+// type ScanRuleConstructor = abstract new () => ScanRule;
 
 /**
  * Annotation Reference
@@ -35,55 +35,55 @@ type ScanRuleConstructor = abstract new () => ScanRule;
  */
 
 export function message(message: string) {
-    return function (target: ScanRuleConstructor): void {
+    return function (target: { prototype: { Message: string; }; }): void {
         target.prototype.Message = message;
     };
 }
 
 export function name(message: string) {
-    return function (target: ScanRuleConstructor): void {
+    return function (target: { prototype: { Name: string; }; }): void {
         target.prototype.Name = message;
     };
 }
 
 export function category(category: string) {
-    return function (target: ScanRuleConstructor): void {
+    return function (target: { prototype: { Category: string; }; }): void {
         target.prototype.Category = category;
     };
 }
 
 export function query(query: string) {
-    return function (target: ScanRuleConstructor): void {
+    return function (target: { prototype: { Query: string; }; }): void {
         target.prototype.Query = query;
     };
 }
 
 export function regex(regex: string) {
-    return function (target: ScanRuleConstructor): void {
+    return function (target: { prototype: { RegEx: string; }; }): void {
         target.prototype.RegEx = regex;
     };
 }
 
 export function suggestion(suggestion: string) {
-    return function (target: ScanRuleConstructor): void {
+    return function (target: { prototype: { Suggestion: string; }; }): void {
         target.prototype.Suggestion = suggestion;
     };
 }
 
 export function priority(priority: number) {
-    return function (target: ScanRuleConstructor): void {
+    return function (target: { prototype: { Priority: number; }; }): void {
         target.prototype.Priority = priority;
     };
 }
 
 export function context(context: string) {
-    return function (target: ScanRuleConstructor): void {
+    return function (target: { prototype: { Context: string; }; }): void {
         target.prototype.Context = context;
     };
 }
 
 export function resultType(resultType: number) {
-    return function (target: ScanRuleConstructor): void {
+    return function (target: { prototype: { RuleType: number; }; }): void {
         target.prototype.RuleType = resultType;
     };
 }
@@ -102,11 +102,14 @@ export abstract class ScanRule {
     Query!: string;
     RegEx!: string;
     Context!: string;
+    SourceCode!: string;
 
     /**
      * No constructor needed, although this could change going forward
      */
-    constructor() {}
+    constructor(sourceCode: string) {
+        this.SourceCode = sourceCode;
+    }
 
     /**
      * preFilter(...) This method provides a structured way to manipulate the set of nodes that are consumed downstream if there is a use case that needs more detailed filtering than the ts query language provides
