@@ -71,7 +71,7 @@ export default class Scanner {
      */
     public static async debug(overrideQuery: string, sourceCode: string, language?: Language): Promise<string> {
         const scanManager: ScanManager = new ScanManager(new Parser(), language ?? TsSfApex.apex, sourceCode, [
-            new SampleRule()
+            new SampleRule(),
         ]);
         console.log(overrideQuery);
         return scanManager.dump(overrideQuery);
