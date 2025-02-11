@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { QueryMatch, SyntaxNode } from 'tree-sitter';
+import { SyntaxNode } from 'tree-sitter';
 import ScanResult from '../results/ScanResult';
 
 // type alias to restrict Function to something that returns a ScanRule
@@ -125,6 +125,7 @@ export abstract class ScanRule {
      * @param _node The root node that is returned from the initial ts query (prefiltered or not, @see `preFilter()`
      * @returns 
      */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     validateRoot(rootNode: SyntaxNode): ScanResult[] {
         return [];
     }

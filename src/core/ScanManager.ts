@@ -100,10 +100,11 @@ export default class ScanManager {
         const scanResultList: ScanResult[] = [];
 
         for (const rule of contextRules) {
-            // JS: Actually, I kind of want that flexibility in order to provide escalating violation levels if needed. 
+            // JS: Actually, I kind of want that flexibility in order to provide escalating violation levels if needed
             // Anything higher than a violation can be considered a potential HPI, etc. Thoughts?
-            
+
             // Ensure that the rule.Priority is not larger than the maximum ResultType (Violation)
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const normalizedPriority: ResultType =
                 rule.Priority > ResultType.VIOLATION ? ResultType.VIOLATION : rule.Priority;
 
@@ -112,7 +113,7 @@ export default class ScanManager {
             try {
                 const filteredRoot: SyntaxNode = rule.preFilter(this.treeSitterNodeTree.rootNode);
                 // Prettier reformats this into a blatant syntax error
-                // eslint-disable-next-line prettier/prettier 
+                // eslint-disable-next-line prettier/prettier
                 const captures: QueryCapture[] = new TreeSitter.Query(this.treeSitterLanguage, queryText).captures(filteredRoot);                
                 // Just the nodes for the following function overrides
                 const capturedNodes: SyntaxNode[] = captures.map((captureInstance) => {
