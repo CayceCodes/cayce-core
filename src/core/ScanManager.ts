@@ -12,7 +12,6 @@ export default class ScanManager {
     private treeSitterParser: Parser;
     private readonly treeSitterLanguage: Language;
     private scannerRules: ScanRule[];
-    private readonly filePath: string;
     private readonly sourceCodeToScan: string;
 
     /**
@@ -21,12 +20,10 @@ export default class ScanManager {
      * and the source code to be scanned.
      * @param parser A tree-sitter parser instance
      * @param language A tree-sitter language instance
-     * @param sourcePath The path to the source code being scanned
      * @param sourceCode The source code to be scanned
      * @param rules An array of ScanRule objects that dictate what to scan for
      */
-    constructor(parser: Parser, language: Language, sourcePath: string, sourceCode: string, rules: Array<ScanRule>) {
-        this.filePath = sourcePath;
+    constructor(parser: Parser, language: Language, sourceCode: string, rules: Array<ScanRule>) {
         this.sourceCodeToScan = sourceCode;
         this.scannerRules = rules;
         this.treeSitterLanguage = language;
