@@ -9,7 +9,7 @@ test('Positive test for description', () => {
 
     //static async create(options: ScannerOptions): Promise<Scanner> {
     
-    let options = {
+    const options = {
         rules: [new ExampleRule()],
         sourcePath: './src/__tests__/SampleApex.cls',
         language: TsSfApex.apex

@@ -12,5 +12,4 @@ import { ScanRule } from './ScanRule';
 @priority(1)
 @query('(parser_output(block_comment) @exp(#match? @exp "@description\\*"))')
 @regex('')
-export class ExampleRule extends ScanRule {
-}
+export class ExampleRule extends ScanRule {}

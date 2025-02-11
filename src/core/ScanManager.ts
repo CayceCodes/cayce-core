@@ -94,7 +94,7 @@ export default class ScanManager {
      * @returns `Map<string, Array<ScanResult>>` A map of category->array of violations. Allows for some
      * custom organization
      */
-    private async commonScan(context: ScanContext): Promise<ScannerResult> {
+    private async commonScan(): Promise<ScannerResult> {
         const resultMap: ScannerResult = this.initializeScannerResult();
         const contextRules = this.scannerRules;
 
