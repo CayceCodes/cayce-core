@@ -97,7 +97,12 @@ export default class ScanManager {
         const resultMap: ScannerResult = this.initializeScannerResult();
         const contextRules = this.scannerRules;
 
+        const scanResultList: ScanResult[] = [];
+
         for (const rule of contextRules) {
+            // JS: Actually, I kind of want that flexibility in order to provide escalating violation levels if needed. 
+            // Anything higher than a violation can be considered a potential HPI, etc. Thoughts?
+            
             // Ensure that the rule.Priority is not larger than the maximum ResultType (Violation)
             const normalizedPriority: ResultType =
                 rule.Priority > ResultType.VIOLATION ? ResultType.VIOLATION : rule.Priority;
@@ -105,65 +110,38 @@ export default class ScanManager {
             const queryText = `${rule.Query}${rule.RegEx ? `(#match? @exp "${rule.RegEx}")` : ''}`;
 
             try {
-                const matches = new TreeSitter.Query(this.treeSitterLanguage, queryText).matches(
-                    this.treeSitterNodeTree.rootNode
-                );
-                if (rule.validateTree(matches).length > 0) {
-                    this.addScanResult(rule, normalizedPriority, resultMap);
+                const filteredRoot: SyntaxNode = rule.preFilter(this.treeSitterNodeTree.rootNode);
+                // Prettier reformats this into a blatant syntax error
+                // eslint-disable-next-line prettier/prettier 
+                const captures: QueryCapture[] = new TreeSitter.Query(this.treeSitterLanguage, queryText).captures(filteredRoot);                
+                // Just the nodes for the following function overrides
+                const capturedNodes: SyntaxNode[] = captures.map((captureInstance) => {
+                    return captureInstance.node;
+                });
+
+                // Default to scan
+                const ruleContext = rule.Context ?? 'scan';
+
+                if (ruleContext.includes('measure')) {
+                    rule.measureNodes(capturedNodes);
                 }
 
-                this.processMatches(matches, rule, normalizedPriority, resultMap);
+                scanResultList.push(...rule.validateNodes(capturedNodes));
+
+                capturedNodes.forEach((node) => {
+                    scanResultList.push(...rule.validateNode(node));
+                });
             } catch (treeSitterError: unknown) {
+                // TODO: Logging
                 console.error(`A tree-sitter query error occurred: ${treeSitterError}`);
             }
         }
         return resultMap;
     }
 
-    /**
-     * This method is used to process the matches returned from the tree-sitter query. It iterates through the found
-     * matches and processes them according to the rules provided.
-     * @param matches The matches found by the tree-sitter query
-     * @param rule The rule to be applied to the matches
-     * @param priority The priority of the rule
-     * @param resultMap The map of categories->violations
-     * @private
-     */
-    private processMatches(
-        matches: TreeSitter.QueryMatch[],
-        rule: ScanRule,
-        priority: ResultType,
-        resultMap: ScannerResult
-    ): void {
-        matches.forEach((match) => {
-            match.captures.forEach((capture) => {
-                if (rule.validate(capture.node)) {
-                    const scanResult = new ScanResult(rule, this.sourceCodeToScan, priority);
-                    resultMap.get(rule.Context)?.push(scanResult);
-                }
-            });
-        });
-    }
-
     private addScanResult(rule: ScanRule, normalizedPriority: ResultType, resultMap: Map<string, ScanResult[]>): void {
         rule.Node = this.treeSitterNodeTree.rootNode;
         const treeScanResult: ScanResult = new ScanResult(rule, this.sourceCodeToScan, normalizedPriority);
         resultMap.get(rule.Context)?.push(treeScanResult);
-    }
-}
-
-/**
- * Simple object for containing information returned from a dump operation. Dump accepts
- * a tree sitter query and spits back the requested source fragment to the console.
- */
-export class DumpResult {
-    SourceFragment: string;
-    StartIndex: number;
-    EndIndex: number;
-
-    constructor(node: SyntaxNode, source: string) {
-        this.SourceFragment = source.substring(node.startIndex, node.endIndex);
-        this.StartIndex = node.startIndex;
-        this.EndIndex = node.endIndex;
     }
 }

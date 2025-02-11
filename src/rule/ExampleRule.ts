@@ -1,4 +1,3 @@
-//(parser_output(block_comment) @exp(#match? @exp "@description\*"))
 import { context, message, name, priority, query, regex, suggestion, category } from './ScanRule';
 import { ScanRule } from './ScanRule';
 
