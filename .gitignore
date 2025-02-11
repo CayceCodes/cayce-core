@@ -20,3 +20,4 @@ target/
 /.illuminatedCloud/
 **/*.tsbuildinfo
 src/harness.ts
+checkin.bat

@@ -56,7 +56,7 @@ export default class ScanManager {
      * For instance, you could measure the number of variables < three characters long.
      */
     async measure(): Promise<ScannerResult> {
-        return this.commonScan('measure');
+        return this.commonScan();
     }
 
     /**
@@ -66,7 +66,7 @@ export default class ScanManager {
      * @returns A map of categories->list of violations
      */
     async scan(): Promise<ScannerResult> {
-        return await this.commonScan('scan');
+        return await this.commonScan();
     }
 
     /**
