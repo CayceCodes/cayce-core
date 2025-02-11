@@ -6,5 +6,18 @@ import ScanResult, { ResultType } from './results/ScanResult';
 import Langauge from './types/Language';
 import { ScanRule, category, context, message, name, priority, query, regex, suggestion } from './rule/ScanRule';
 
-export { ScanRule, Scanner, ScanResult, category, context, message, name, priority, query, regex, suggestion };
-export type { ScannerOptions, ResultType, Langauge };
+export {
+    ScanRule,
+    Scanner,
+    ScanResult,
+    ResultType,
+    category,
+    context,
+    message,
+    name,
+    priority,
+    query,
+    regex,
+    suggestion,
+};
+export type { ScannerOptions, Langauge };
