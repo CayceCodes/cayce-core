@@ -35,55 +35,55 @@ import ScanResult from '../results/ScanResult';
  */
 
 export function message(message: string) {
-    return function (target: { prototype: { Message: string; }; }): void {
+    return function (target: { prototype: { Message: string } }): void {
         target.prototype.Message = message;
     };
 }
 
 export function name(message: string) {
-    return function (target: { prototype: { Name: string; }; }): void {
+    return function (target: { prototype: { Name: string } }): void {
         target.prototype.Name = message;
     };
 }
 
 export function category(category: string) {
-    return function (target: { prototype: { Category: string; }; }): void {
+    return function (target: { prototype: { Category: string } }): void {
         target.prototype.Category = category;
     };
 }
 
 export function query(query: string) {
-    return function (target: { prototype: { Query: string; }; }): void {
+    return function (target: { prototype: { Query: string } }): void {
         target.prototype.Query = query;
     };
 }
 
 export function regex(regex: string) {
-    return function (target: { prototype: { RegEx: string; }; }): void {
+    return function (target: { prototype: { RegEx: string } }): void {
         target.prototype.RegEx = regex;
     };
 }
 
 export function suggestion(suggestion: string) {
-    return function (target: { prototype: { Suggestion: string; }; }): void {
+    return function (target: { prototype: { Suggestion: string } }): void {
         target.prototype.Suggestion = suggestion;
     };
 }
 
 export function priority(priority: number) {
-    return function (target: { prototype: { Priority: number; }; }): void {
+    return function (target: { prototype: { Priority: number } }): void {
         target.prototype.Priority = priority;
     };
 }
 
 export function context(context: string) {
-    return function (target: { prototype: { Context: string; }; }): void {
+    return function (target: { prototype: { Context: string } }): void {
         target.prototype.Context = context;
     };
 }
 
 export function resultType(resultType: number) {
-    return function (target: { prototype: { RuleType: number; }; }): void {
+    return function (target: { prototype: { RuleType: number } }): void {
         target.prototype.RuleType = resultType;
     };
 }
