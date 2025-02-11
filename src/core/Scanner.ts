@@ -10,6 +10,7 @@ import TsSfApex from 'tree-sitter-sfapex';
 import Parser from 'tree-sitter';
 import ScanResult from '../results/ScanResult';
 import { SampleRule } from '../rule/SampleRule';
+import Language from '../types/Language';
 
 export interface ScannerOptions {
     sourcePath: string;
@@ -68,9 +69,9 @@ export default class Scanner {
      * @param overrideQuery  If you wish to use a custom query, use it here.
      * @param sourceCode The source to be scanned. Useful when there is a use case for scanning multiple targets for debugging
      */
-    public static async debug(overrideQuery: string, sourceCode: string, language?: any): Promise<string> {
+    public static async debug(overrideQuery: string, sourceCode: string, language?: Language): Promise<string> {
         const scanManager: ScanManager = new ScanManager(new Parser(), language ?? TsSfApex.apex, sourceCode, [
-            new SampleRule(),
+            new SampleRule()
         ]);
         console.log(overrideQuery);
         return scanManager.dump(overrideQuery);
