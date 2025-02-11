@@ -53,7 +53,6 @@ export default class Scanner {
         this.parser = new Parser();
         this.language = TsSfApex.apex;
         this.scanManager = new ScanManager(this.parser, TsSfApex.apex, this.sourceCode, this.rules);
-        console.log('hola');
     }
 
     /**'
