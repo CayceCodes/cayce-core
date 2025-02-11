@@ -96,7 +96,7 @@ export default class ScanManager {
      */
     private async commonScan(context: ScanContext): Promise<ScannerResult> {
         const resultMap: ScannerResult = this.initializeScannerResult();
-        const contextRules = this.scannerRules.filter((rule) => rule.Context.includes(context));
+        const contextRules = this.scannerRules;
 
         for (const rule of contextRules) {
             // Ensure that the rule.Priority is not larger than the maximum ResultType (Violation)
@@ -168,35 +168,3 @@ export class DumpResult {
         this.EndIndex = node.endIndex;
     }
 }
-
-// const RULE_REGISTRY = {
-//   rules: [
-//     {
-//       name: 'Variables',
-//       queries: [
-//         {
-//           name: 'Total',
-//           context: 'measure',
-//           message: 'This is the total number of variable declarations, not counting method arguments.',
-//           query: '(variable_declarator (identifier) @exp)',
-//         },
-//         {
-//           name: 'Length < 3',
-//           context: 'scan,measure',
-//           message: 'Variables should be descriptive, clear, and concise with names over three characters long.',
-//           query: '(variable_declarator (identifier) @exp)',
-//           function: function (node) {
-//             return node.text.length > 3;
-//           },
-//         },
-//         {
-//           name: 'Trivial RegEx',
-//           context: 'scan,measure',
-//           message: 'A trivial RegEx (for testing) has produced some matches.',
-//           query: '(variable_declarator (identifier) @exp)',
-//           pattern: 'foo_[a-zA-Z0-9]*',
-//         },
-//       ],
-//     },
-//   ],
-// };
