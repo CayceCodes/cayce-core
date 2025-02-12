@@ -2,3 +2,5 @@ node_modules/
 dist/
 coverage/
 src/harness.ts
+rule/ScanRule.ts
+rule/ScanRule.ts

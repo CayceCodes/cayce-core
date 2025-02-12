@@ -10,7 +10,7 @@ import TsSfApex from 'tree-sitter-sfapex';
 import Parser from 'tree-sitter';
 import ScanResult from '../results/ScanResult';
 import { SampleRule } from '../rule/SampleRule';
-import Language from '../types/Language';
+import { Language } from '../core/Language';
 
 export interface ScannerOptions {
     sourcePath: string;
