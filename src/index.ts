@@ -7,7 +7,7 @@ import ScanResult, { ResultType } from './results/ScanResult';
 import { context, message, name, priority, query, regex, suggestion, category } from './rule/ScanRule';
 import { Language } from './core/Language';
 
-export { ScanRule, Scanner, ScanResult };
+export { ScanRule, Scanner, ScanResult, ResultType };
 export type { Language };
 export { context, message, name, priority, query, regex, suggestion, category };
-export type { ScannerOptions, ResultType };
+export type { ScannerOptions };
