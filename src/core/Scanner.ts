@@ -2,22 +2,22 @@
 import * as fs from 'node:fs/promises';
 
 // Local imports
-import ScanManager from '../core/ScanManager';
-import { ScanRule } from '../rule/ScanRule';
+import ScanManager from '../core/ScanManager.js';
+import { ScanRule } from '../rule/ScanRule.js';
+import ScanResult from '../results/ScanResult.js';
+// import { ExampleRule } from '../rule/ExampleRule.js';
 
 // Third party imports
 import TsSfApex from 'tree-sitter-sfapex';
 import Parser from 'tree-sitter';
-import ScanResult from '../results/ScanResult';
-import { SampleRule } from '../rule/SampleRule';
-import { Language } from '../core/Language';
+import Language from '../types/Language.d.js';
 
 export interface ScannerOptions {
     sourcePath: string;
     rules: Array<ScanRule>;
     overrideQuery?: string;
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    language?: any;
+    language?: Language;
 }
 
 export default class Scanner {
@@ -28,7 +28,7 @@ export default class Scanner {
     private scanManager: ScanManager;
     private readonly parser: Parser;
     /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    private readonly language: any; // I hate having to use any here. ugh.
+    private readonly language: Language;
     private readonly overrideQuery: string;
 
     /// Static class methods
@@ -56,7 +56,7 @@ export default class Scanner {
         this.scanManager = new ScanManager(this.parser, TsSfApex.apex, this.sourceCode, this.rules);
     }
 
-    /**'
+    /**
      * @description Does a standard scan with the rules and target specified in the ScannerOptions on instantiation
      * @retuns A map of scan contextx (usually measure or scan, or both) to scan resultsl. The results object references the rule instance, syntax node, and other related objects for use in getting more detailed informatioon
      */
@@ -64,19 +64,19 @@ export default class Scanner {
         return await this.scanManager.scan();
     }
 
-    /**
-     * @description A simple dump that is the result of a tree sitter query/s-expression passed in to the method. If no query is specificed, it uses a default query that retrieves the body of a class.
-     * @param overrideQuery  If you wish to use a custom query, use it here.
-     * @param sourceCode The source to be scanned. Useful when there is a use case for scanning multiple targets for debugging
-     * @param language The language to be used for the scan. Defaults to Apex
-     */
-    public static async debug(overrideQuery: string, sourceCode: string, language?: Language): Promise<string> {
-        const scanManager: ScanManager = new ScanManager(new Parser(), language ?? TsSfApex.apex, sourceCode, [
-            new SampleRule(sourceCode),
-        ]);
-        console.log(overrideQuery);
-        return scanManager.dump(overrideQuery);
-    }
+    // /**
+    //  * @description A simple dump that is the result of a tree sitter query/s-expression passed in to the method. If no query is specificed, it uses a default query that retrieves the body of a class.
+    //  * @param overrideQuery If you wish to use a custom query, use it here.
+    //  * @param sourceCode The source to be scanned. Useful when there is a use case for scanning multiple targets for debugging
+    //  * @param language The language to be used for the scan. Defaults to Apex
+    //  */
+    // public static async debug(overrideQuery: string, sourceCode: string, language?: Language): Promise<string> {
+    //     const scanManager: ScanManager = new ScanManager(new Parser(), language ?? TsSfApex.apex, sourceCode, [
+    //         new ExampleRule(sourceCode),
+    //     ]);
+    //     console.log(overrideQuery);
+    //     return scanManager.dump(overrideQuery);
+    // }
 
     public async measure(): Promise<Map<string, ScanResult[]>> {
         return await this.scanManager.measure();

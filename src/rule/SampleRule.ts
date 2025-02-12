@@ -1,5 +1,4 @@
-import { context, message, name, priority, query, regex, suggestion, category } from './ScanRule';
-import { ScanRule } from './ScanRule';
+import { ScanRule, context, message, name, priority, query, regex, suggestion, category } from './ScanRule.js';
 
 @name('Bad pattern')
 @category('clarity')

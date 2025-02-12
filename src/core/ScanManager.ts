@@ -1,8 +1,8 @@
 import Parser, { QueryCapture, SyntaxNode } from 'tree-sitter';
 import * as TreeSitter from 'tree-sitter';
-import ScanResult, { ResultType } from '../results/ScanResult';
+import ScanResult, { ResultType } from '../results/ScanResult.js';
 import { ScanRule } from '../rule/ScanRule.js';
-import { Language } from '../core/Language.js';
+import Language from '../types/Language.d.js';
 
 type ScannerResult = Map<string, ScanResult[]>;
 
@@ -10,7 +10,7 @@ export default class ScanManager {
     private treeSitterNodeTree: Parser.Tree;
     private treeSitterParser: Parser;
     private readonly treeSitterLanguage: Language;
-    private scannerRules: ScanRule[];
+    private readonly scannerRules: ScanRule[];
     private readonly sourceCodeToScan: string;
 
     /**
@@ -89,7 +89,6 @@ export default class ScanManager {
      * Common scan method used by both scan and measure. Both were consolidated here as both essentially
      * did the same thing, just reported the results differently. Realizing that how the report is formatted
      * should be the purview of something other than the scanner, I moved that stuff out.
-     * @param context What operational context we are using. Scan or measure are currently supported.
      * @returns `Map<string, Array<ScanResult>>` A map of category->array of violations. Allows for some
      * custom organization
      */
