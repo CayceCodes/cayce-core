@@ -1,13 +1,23 @@
 // index.ts
 
-import Scanner from './core/Scanner';
-import { ScannerOptions } from './core/Scanner';
-import { ScanRule } from './rule/ScanRule';
-import ScanResult, { ResultType } from './results/ScanResult';
-import { context, message, name, priority, query, regex, suggestion, category } from './rule/ScanRule';
-import { Language } from './core/Language';
+import Scanner from './core/Scanner.js';
+import { ScannerOptions } from './core/Scanner.js';
+import ScanResult, { ResultType } from './results/ScanResult.js';
+import Langauge from './types/Language.js';
+import { ScanRule, category, context, message, name, priority, query, regex, suggestion } from './rule/ScanRule.js';
 
-export { ScanRule, Scanner, ScanResult, ResultType };
-export type { Language };
-export { context, message, name, priority, query, regex, suggestion, category };
-export type { ScannerOptions };
+export {
+    ScanRule,
+    Scanner,
+    ScanResult,
+    ResultType,
+    category,
+    context,
+    message,
+    name,
+    priority,
+    query,
+    regex,
+    suggestion,
+};
+export type { ScannerOptions, Langauge };

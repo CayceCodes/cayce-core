@@ -1,25 +1,13 @@
-import { SyntaxNode } from 'tree-sitter';
-import ScanResult, { ResultType } from '../results/ScanResult';
-import { context, message, name, priority, query, regex, suggestion, category } from './ScanRule';
-import { ScanRule } from './ScanRule';
+import { ScanRule, context, message, name, priority, query, regex, suggestion, category } from './ScanRule.js';
 
-@name('Check for description in the class header comment')
+@name('Check for descripition in the class header comment')
 @category('clarity')
 @context('scan')
-@message('The name of this method is too short (under three characters)')
+@message('There is no @description tag in the header comment')
 @suggestion(
-    'A method name should be as descriptive as possible. Consider changing the name to reflect the function and utility of its purpose'
+    'Consider adding an appropriate description that adds clarity and context. It helps to include why this class exists, as opposed to what it does.'
 )
 @priority(1)
-@query('(method_declaration (identifier)@a)')
+@query('(parser_output(block_comment) @exp(#match? @exp "@description\\*"))')
 @regex('')
-export class ExampleRule extends ScanRule {
-    validateNode(node: SyntaxNode): ScanResult[] {
-        const resultList: ScanResult[] = [];
-        if (node.text.length < 4) {
-            resultList.push(new ScanResult(this, ResultType.VIOLATION, []));
-        }
-
-        return resultList;
-    }
-}
+export class ExampleRule extends ScanRule {}

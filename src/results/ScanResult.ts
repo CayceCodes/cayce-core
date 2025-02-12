@@ -1,6 +1,6 @@
 import { SyntaxNode } from 'tree-sitter';
-import { ScanRule } from '../rule/ScanRule';
-import SourceFragment from './SourceFragment';
+import { ScanRule } from '../rule/ScanRule.js';
+import SourceFragment from './SourceFragment.js';
 
 export abstract class ScanMetric {
     Result: ResultType;
@@ -27,10 +27,10 @@ export default class ScanResult implements ScanMetric {
     readonly grammarType: string;
     /**
      * constructor Doesn't do anything special other than initialize the various fields
-     * @param sourceNode
      * @param rule
-     * @param filePath
-     * @param metaData
+     * @param resultType
+     * @param metadata
+     * @see `ScanResult.metadata`
      */
     constructor(rule: ScanRule, resultType: ResultType, metadata?: Array<string>) {
         this.SourceNode = rule.Node;
