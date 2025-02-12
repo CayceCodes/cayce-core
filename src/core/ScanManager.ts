@@ -2,7 +2,7 @@ import Parser, { QueryCapture, SyntaxNode } from 'tree-sitter';
 import * as TreeSitter from 'tree-sitter';
 import ScanResult, { ResultType } from '../results/ScanResult';
 import { ScanRule } from '../rule/ScanRule.js';
-import Language from '../types/Language.js';
+import { Language } from '../core/Language.js';
 
 type ScannerResult = Map<string, ScanResult[]>;
 
