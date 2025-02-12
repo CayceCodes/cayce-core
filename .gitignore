@@ -21,3 +21,5 @@ target/
 **/*.tsbuildinfo
 src/harness.ts
 checkin.bat
+
+src/**/*.js
