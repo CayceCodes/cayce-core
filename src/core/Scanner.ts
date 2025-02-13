@@ -5,12 +5,12 @@ import * as fs from 'node:fs/promises';
 import ScanManager from '../core/ScanManager.js';
 import { ScanRule } from '../rule/ScanRule.js';
 import ScanResult from '../results/ScanResult.js';
-// import { ExampleRule } from '../rule/ExampleRule.js';
+import { ExampleRule } from '../rule/ExampleRule.js';
 
 // Third party imports
-import TsSfApex from 'tree-sitter-sfapex';
 import Parser from 'tree-sitter';
-import Language from '../types/Language.d.js';
+import type { Language } from 'tree-sitter';
+import TsSfApex from 'tree-sitter-sfapex';
 
 export interface ScannerOptions {
     sourcePath: string;
@@ -53,7 +53,7 @@ export default class Scanner {
         this.overrideQuery = options.overrideQuery ?? '';
         this.parser = new Parser();
         this.language = TsSfApex.apex;
-        this.scanManager = new ScanManager(this.parser, TsSfApex.apex, this.sourceCode, this.rules);
+        this.scanManager = new ScanManager(this.parser, this.language, this.sourceCode, this.rules);
     }
 
     /**
@@ -70,13 +70,13 @@ export default class Scanner {
     //  * @param sourceCode The source to be scanned. Useful when there is a use case for scanning multiple targets for debugging
     //  * @param language The language to be used for the scan. Defaults to Apex
     //  */
-    // public static async debug(overrideQuery: string, sourceCode: string, language?: Language): Promise<string> {
-    //     const scanManager: ScanManager = new ScanManager(new Parser(), language ?? TsSfApex.apex, sourceCode, [
-    //         new ExampleRule(sourceCode),
-    //     ]);
-    //     console.log(overrideQuery);
-    //     return scanManager.dump(overrideQuery);
-    // }
+    public static async debug(overrideQuery: string, sourceCode: string, language?: Language): Promise<string> {
+        const scanManager: ScanManager = new ScanManager(new Parser(), language ?? TsSfApex.apex, sourceCode, [
+            new ExampleRule(sourceCode),
+        ]);
+        console.log(overrideQuery);
+        return scanManager.dump(overrideQuery);
+    }
 
     public async measure(): Promise<Map<string, ScanResult[]>> {
         return await this.scanManager.measure();
