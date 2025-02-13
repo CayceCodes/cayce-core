@@ -23,3 +23,5 @@ src/harness.ts
 checkin.bat
 
 src/**/*.js
+
+**/tsconfig*.json

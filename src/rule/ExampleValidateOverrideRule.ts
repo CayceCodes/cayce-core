@@ -1,7 +1,18 @@
 /* eslint-disable prettier/prettier */
 import { SyntaxNode } from 'tree-sitter';
-import { ScanRule, context, message, name, priority, query, regex, suggestion, category } from './ScanRule.js';
-import ScanResult, { ResultType } from '../results/ScanResult.js';
+import {
+    ScanResult,
+    ScanRule,
+    ResultType,
+    context,
+    message,
+    name,
+    priority,
+    query,
+    regex,
+    suggestion,
+    category,
+} from 'sourceloupe-types';
 
 @name('Check for description in the class header comment')
 @category('clarity')

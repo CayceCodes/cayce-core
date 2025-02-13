@@ -1,7 +1,6 @@
 import Parser, { QueryCapture, SyntaxNode } from 'tree-sitter';
 import * as TreeSitter from 'tree-sitter';
-import ScanResult, { ResultType } from '../results/ScanResult.js';
-import { ScanRule } from '../rule/ScanRule.js';
+import { ScanResult, ScanRule, ResultType } from 'sourceloupe-types';
 import type { Language } from 'tree-sitter';
 type ScannerResult = Map<string, ScanResult[]>;
 
@@ -98,7 +97,7 @@ export default class ScanManager {
         const scanResultList: ScanResult[] = [];
 
         for (const rule of contextRules) {
-            // JS: Actually, I kind of want that flexibility in order to provide escalating violation levels if needed
+            // JS: Actually, I kind of want that flexibility to provide escalating violation levels if needed
             // Anything higher than a violation can be considered a potential HPI, etc. Thoughts?
 
             // Ensure that the rule.Priority is not larger than the maximum ResultType (Violation)
