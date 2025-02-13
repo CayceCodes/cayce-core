@@ -7,7 +7,7 @@ test('Positive test for description', () => {
     const options = {
         rules: [new ExampleRule('public class Foo{}')],
         sourcePath: './src/__tests__/SampleApex.cls',
-        language: TsSfApex.default.apex,
+        language: TsSfApex.apex,
     };
 
     Scanner.create(options).then((scanner) => {

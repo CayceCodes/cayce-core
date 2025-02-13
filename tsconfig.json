@@ -20,7 +20,7 @@
         "sourceMap": true,
         "strict": true,
         "target": "es6",
-        "typeRoots": ["./node_modules/@types", "./src/types"],
+        "typeRoots": ["./node_modules/@types", "./src/types", "./node_modules/tree-sitter-sfapex"],
         "types": ["node", "jest"]
     },
     "exclude": ["node_modules", "dist", "jest.config.ts", "src/__tests__/**/*"],
