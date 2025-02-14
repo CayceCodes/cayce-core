@@ -134,6 +134,8 @@ export abstract class ScanRule {
      * @param nodes A collection of nodes that have been returned via a ts query after being optionally filtered via preFilter
      * @returns Array of scan results that correspond to the violations or metrics we are interested in
      */
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     validateNodes(nodes: Array<SyntaxNode>): ScanResult[] {
         return [];
     }
@@ -143,6 +145,7 @@ export abstract class ScanRule {
      * @param node A single node that will be inspected and either scanned for violation(s) or measured for metrics
      * @returns Array of ScanResult instances. Returning more than one allows a rule to cover overlapping use cases
      */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     validateNode(node: SyntaxNode): ScanResult[] {
         return [];
     }
@@ -152,6 +155,7 @@ export abstract class ScanRule {
      * @param _nodes A set of nodes that are usually the result of a tree sitter query that apply to some measurement (variable counts, etc.)
      * @returns
      */
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     measureNodes(_nodes: SyntaxNode[]): Map<string, SyntaxNode[]> {
         return new Map<string, SyntaxNode[]>();
     }
