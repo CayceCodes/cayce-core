@@ -11,7 +11,7 @@
     "scripts": {
         "build": "shx rm -rf dist && tsc -b",
         "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-        "lint": "eslint . --ext .ts",
+        "lint": "eslint . -c eslint.config.js",
         "format": "prettier --write \"**/*.{ts,json,md}\"",
         "prepare": "npm run build",
         "prepublishOnly": "npm test && npm run lint && npm run format",
@@ -39,6 +39,7 @@
     },
     "homepage": "https://github.com/justinstroudbah/sourceloupe#readme",
     "dependencies": {
+        "@eslint/js": "^9.20.0",
         "sourceloupe-types": "^1.0.0",
         "tree-sitter": "^0.22.4",
         "tree-sitter-sfapex": "^2.4.1"

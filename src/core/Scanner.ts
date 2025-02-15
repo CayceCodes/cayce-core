@@ -3,8 +3,7 @@ import * as fs from 'node:fs/promises';
 
 // Local imports
 import ScanManager from '../core/ScanManager.js';
-import { ScanRule } from '../rule/ScanRule.js';
-import ScanResult from '../results/ScanResult.js';
+import { ScanRule, ScanResult } from 'sourceloupe-types';
 import { ExampleRule } from '../rule/ExampleRule.js';
 
 // Third party imports
@@ -16,7 +15,6 @@ export interface ScannerOptions {
     sourcePath: string;
     rules: Array<ScanRule>;
     overrideQuery?: string;
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     language?: Language;
 }
 
@@ -27,7 +25,6 @@ export default class Scanner {
     private readonly rules: Array<ScanRule>;
     private scanManager: ScanManager;
     private readonly parser: Parser;
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
     private readonly language: Language;
     private readonly overrideQuery: string;
 
@@ -74,7 +71,7 @@ export default class Scanner {
         const scanManager: ScanManager = new ScanManager(new Parser(), language ?? TsSfApex.apex, sourceCode, [
             new ExampleRule(sourceCode),
         ]);
-        console.log(overrideQuery);
+        // console.log(overrideQuery);
         return scanManager.dump(overrideQuery);
     }
 

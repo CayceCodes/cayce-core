@@ -1,7 +1,6 @@
 import Parser, { QueryCapture, SyntaxNode } from 'tree-sitter';
 import * as TreeSitter from 'tree-sitter';
-import ScanResult, { ResultType } from '../results/ScanResult.js';
-import { ScanRule } from '../rule/ScanRule.js';
+import { ScanResult, ResultType, ScanRule } from 'sourceloupe-types';
 import type { Language } from 'tree-sitter';
 type ScannerResult = Map<string, ScanResult[]>;
 
@@ -111,7 +110,6 @@ export default class ScanManager {
             try {
                 const filteredRoot: SyntaxNode = rule.preFilter(this.treeSitterNodeTree.rootNode);
                 // Prettier reformats this into a blatant syntax error
-                // eslint-disable-next-line prettier/prettier
                 const captures: QueryCapture[] = new TreeSitter.Query(this.treeSitterLanguage, queryText).captures(
                     filteredRoot
                 );

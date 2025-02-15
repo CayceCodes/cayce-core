@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import TsSfApex from 'tree-sitter-sfapex';
 import Scanner from '../core/Scanner.js';
 import { ExampleRule } from '../rule/ExampleRule.js';

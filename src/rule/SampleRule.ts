@@ -1,4 +1,4 @@
-import { ScanRule, context, message, name, priority, query, regex, suggestion, category } from './ScanRule.js';
+import { ScanRule, context, message, name, priority, query, regex, suggestion, category } from 'sourceloupe-types';
 
 @name('Bad pattern')
 @category('clarity')
