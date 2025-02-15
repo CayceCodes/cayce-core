@@ -1,5 +1,17 @@
 import { SyntaxNode } from 'tree-sitter';
-import { ScanResult, ScanRule, ResultType, context, message, name, priority, query, regex, suggestion, category } from 'sourceloupe-types';
+import {
+    ScanResult,
+    ScanRule,
+    ResultType,
+    context,
+    message,
+    name,
+    priority,
+    query,
+    regex,
+    suggestion,
+    category,
+} from 'sourceloupe-types';
 
 @name('Check for description in the class header comment')
 @category('clarity')
