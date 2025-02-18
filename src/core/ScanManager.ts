@@ -66,7 +66,6 @@ export default class ScanManager {
         return await this.commonScan();
     }
 
-
     /**
      * Common scan method used by both scan and measure. Both were consolidated here as both essentially
      * did the same thing, just reported the results differently. Realizing that how the report is formatted
@@ -114,6 +113,6 @@ export default class ScanManager {
                 console.error(`A tree-sitter query error occurred: ${treeSitterError}`);
             }
         }
-        return scanResultList
+        return scanResultList;
     }
 }
