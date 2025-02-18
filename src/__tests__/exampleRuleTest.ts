@@ -11,7 +11,7 @@ test('Positive test for description', () => {
 
     Scanner.create(options).then((scanner) => {
         scanner.run().then((results) => {
-            expect(results.size).toBeGreaterThan(0);
+            expect(results.length).toBeGreaterThan(0);
         });
     });
 });
