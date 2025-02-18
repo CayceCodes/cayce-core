@@ -55,9 +55,9 @@ export default class Scanner {
 
     /**
      * @description Does a standard scan with the rules and target specified in the ScannerOptions on instantiation
-     * @retuns A map of scan contextx (usually measure or scan, or both) to scan results. The result object references the rule instance, syntax node, and other related objects for use in getting more detailed informatioon
+     * @retuns A map of scan contexts (usually measure or scan, or both) to scan results. The result object references the rule instance, syntax node, and other related objects for use in getting more detailed informatioon
      */
-    public async run(): Promise<Map<string, ScanResult[]>> {
+    public async run(): Promise<ScanResult[]> {
         return await this.scanManager.scan();
     }
 
@@ -75,7 +75,7 @@ export default class Scanner {
         return scanManager.dump(overrideQuery);
     }
 
-    public async measure(): Promise<Map<string, ScanResult[]>> {
+    public async measure(): Promise<ScanResult[]> {
         return await this.scanManager.measure();
     }
 

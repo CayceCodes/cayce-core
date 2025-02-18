@@ -1,8 +1,7 @@
-import Parser, { QueryCapture, SyntaxNode } from 'tree-sitter';
-import * as TreeSitter from 'tree-sitter';
-import { ScanResult, ResultType, ScanRule } from 'sourceloupe-types';
 import type { Language } from 'tree-sitter';
-type ScannerResult = Map<string, ScanResult[]>;
+import Parser, * as TreeSitter from 'tree-sitter';
+import { QueryCapture, SyntaxNode } from 'tree-sitter';
+import { ResultType, ScanResult, ScanRule } from 'sourceloupe-types';
 
 export default class ScanManager {
     private treeSitterNodeTree: Parser.Tree;
@@ -53,7 +52,7 @@ export default class ScanManager {
      * Measure is a scanner method for counting things. It's a way to measure the codebase for various metrics.
      * For instance, you could measure the number of variables < three characters long.
      */
-    async measure(): Promise<ScannerResult> {
+    async measure(): Promise<ScanResult[]> {
         return this.commonScan();
     }
 
@@ -63,25 +62,10 @@ export default class ScanManager {
      * TODO: Refactor the private commonScan method so that it iterates through a supplied set of rules invoked through a dynamic import
      * @returns A map of categories->list of violations
      */
-    async scan(): Promise<ScannerResult> {
+    async scan(): Promise<ScanResult[]> {
         return await this.commonScan();
     }
 
-    /**
-     * This method is used to initialize the scanner result map. It is used to store the results of the scan.
-     * This prevents us from if/els-ing on whether a category exists in the map.
-     * @returns `Map<string, Array<ScanResult>>` A map of category->array of violations. Allows for some
-     * @private
-     */
-    private initializeScannerResult(): ScannerResult {
-        const resultMap: ScannerResult = new Map<string, Array<ScanResult>>();
-        const categories = this.scannerRules.map((rule) => rule.Category);
-        const uniqueCategories = [...new Set(categories)];
-        for (const category of uniqueCategories) {
-            resultMap.set(category, []);
-        }
-        return resultMap;
-    }
 
     /**
      * Common scan method used by both scan and measure. Both were consolidated here as both essentially
@@ -90,21 +74,16 @@ export default class ScanManager {
      * @returns `Map<string, Array<ScanResult>>` A map of category->array of violations. Allows for some
      * custom organization
      */
-    private async commonScan(): Promise<ScannerResult> {
-        const resultMap: ScannerResult = this.initializeScannerResult();
+    private async commonScan(): Promise<ScanResult[]> {
         const contextRules = this.scannerRules;
 
         const scanResultList: ScanResult[] = [];
 
         for (const rule of contextRules) {
-            // JS: Actually, I kind of want that flexibility in order to provide escalating violation levels if needed
-            // Anything higher than a violation can be considered a potential HPI, etc. Thoughts?
-
-            // Ensure that the rule.Priority is not larger than the maximum ResultType (Violation)
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const normalizedPriority: ResultType =
-                rule.Priority > ResultType.VIOLATION ? ResultType.VIOLATION : rule.Priority;
-
+            // This next line normalizes the priority to the highest level of severity in case someone tries to
+            // execute a rule with a priority of 16452 or something. That priority wouldn't be mappable to
+            // sarif severity levels.
+            rule.Priority = rule.Priority > ResultType.VIOLATION ? ResultType.VIOLATION : rule.Priority;
             const queryText = `${rule.Query}${rule.RegEx ? `(#match? @exp "${rule.RegEx}")` : ''}`;
 
             try {
@@ -135,6 +114,6 @@ export default class ScanManager {
                 console.error(`A tree-sitter query error occurred: ${treeSitterError}`);
             }
         }
-        return resultMap;
+        return scanResultList
     }
 }
