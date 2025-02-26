@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/sourceloupe.iml" filepath="$PROJECT_DIR$/sourceloupe.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cayce-core.iml" filepath="$PROJECT_DIR$/cayce-core.iml" />
     </modules>
   </component>
 </project>

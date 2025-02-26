@@ -1,7 +1,7 @@
 import type { Language, QueryMatch } from 'tree-sitter';
 import Parser, * as TreeSitter from 'tree-sitter';
 import { QueryCapture, SyntaxNode } from 'tree-sitter';
-import { ResultType, ScanResult, ScanRule } from 'sourceloupe-types';
+import { ResultType, ScanResult, ScanRule } from 'cayce-types';
 
 export default class ScanManager {
     private treeSitterNodeTree: Parser.Tree;
@@ -84,21 +84,20 @@ export default class ScanManager {
             // This next line normalizes the priority to the highest level of severity in case someone tries to
             // execute a rule with a priority of 16452 or something. That priority wouldn't be mappable to
             // sarif severity levels.
-            ruleIteration.Priority = ruleIteration.Priority > ResultType.VIOLATION ? ResultType.VIOLATION : ruleIteration.Priority;
+            ruleIteration.Priority =
+                ruleIteration.Priority > ResultType.VIOLATION ? ResultType.VIOLATION : ruleIteration.Priority;
             const queryText = ruleIteration.Query;
 
             try {
                 const filteredRoot: SyntaxNode = ruleIteration.preFilter(this.treeSitterNodeTree.rootNode);
                 // Prettier reformats this into a blatant syntax error
-                const captureQuery: TreeSitter.Query = new TreeSitter.Query(this.treeSitterLanguage, queryText)
+                const captureQuery: TreeSitter.Query = new TreeSitter.Query(this.treeSitterLanguage, queryText);
                 const ruleContext = ruleIteration.Context ?? 'scan';
                 ruleIteration.validateQuery(captureQuery, filteredRoot).forEach((capturedNode) => {
-                    scanResultList.push(new ScanResult(
-                        ruleIteration, 
-                        ruleIteration.ResultType, 
-                        capturedNode as Parser.SyntaxNode));
+                    scanResultList.push(
+                        new ScanResult(ruleIteration, ruleIteration.ResultType, capturedNode as Parser.SyntaxNode)
+                    );
                 });
-
             } catch (treeSitterError: unknown) {
                 console.error(`A tree-sitter query error occurred: ${treeSitterError}`);
             }

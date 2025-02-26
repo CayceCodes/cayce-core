@@ -3,7 +3,7 @@ import * as fs from 'node:fs/promises';
 
 // Local imports
 import ScanManager from '../core/ScanManager.js';
-import { ScanRule, ScanResult } from 'sourceloupe-types';
+import { ScanRule, ScanResult } from 'cayce-types';
 import { ExampleRule } from '../rule/ExampleRule.js';
 
 // Third party imports

@@ -11,7 +11,7 @@ import {
     regex,
     suggestion,
     category,
-} from 'sourceloupe-types';
+} from 'cayce-types';
 
 @name('Check for description in the class header comment')
 @category('clarity')

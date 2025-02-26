@@ -1,4 +1,4 @@
-import { ScanRule, context, message, name, priority, query, regex, suggestion, category } from 'sourceloupe-types';
+import { ScanRule, context, message, name, priority, query, regex, suggestion, category } from 'cayce-types';
 
 @name('Check for descripition in the class header comment')
 @category('clarity')
