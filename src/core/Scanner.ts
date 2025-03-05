@@ -49,6 +49,7 @@ export default class Scanner {
         this.rules = options.rules;
         this.overrideQuery = options.overrideQuery ?? '';
         this.parser = new Parser();
+        // TODO: Languyage should be part of the rules (plugin) not the core
         this.language = TsSfApex.apex;
         this.scanManager = new ScanManager(this.parser, this.language, this.sourceCode, this.rules);
     }
