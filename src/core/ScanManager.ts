@@ -1,12 +1,14 @@
-import type { Language, QueryMatch } from 'tree-sitter';
-import Parser, * as TreeSitter from 'tree-sitter';
-import { QueryCapture, SyntaxNode } from 'tree-sitter';
-import { ResultType, ScanResult, ScanRule } from 'cayce-types';
+import Parser, { type Language, QueryCapture, SyntaxNode } from 'tree-sitter';
+import ScanResult, { ResultType } from './ScanResult.js';
+import { ScanRule } from 'cayce-types';
+import TreeSitter from 'tree-sitter';
+import { ShortIdentifierLengths } from './rules/ShortIdentifierLengths.js';
+import { AllIdentifierLengths } from './rules/AllIdentifierLengths.js';
 
 export default class ScanManager {
-    private treeSitterNodeTree: Parser.Tree;
+    private treeSitterNodeTree!: Parser.Tree;
     private treeSitterParser: Parser;
-    private readonly treeSitterLanguage: Language;
+    private readonly treeSitterLanguage!: Language;
     private readonly scannerRules: ScanRule[];
     private readonly sourceCodeToScan: string;
 
@@ -19,13 +21,10 @@ export default class ScanManager {
      * @param sourceCode The source code to be scanned
      * @param rules An array of ScanRule objects that dictate what to scan for
      */
-    constructor(parser: Parser, language: Language, sourceCode: string, rules: Array<ScanRule>) {
+    constructor(parser: Parser, sourceCode: string, rules: (ShortIdentifierLengths | AllIdentifierLengths)[]) {
         this.sourceCodeToScan = sourceCode;
         this.scannerRules = rules;
-        this.treeSitterLanguage = language;
         this.treeSitterParser = parser;
-        this.treeSitterParser.setLanguage(language);
-        this.treeSitterNodeTree = parser.parse(this.sourceCodeToScan);
     }
 
     /**
@@ -38,7 +37,7 @@ export default class ScanManager {
         // Use dump as a mechanism to allow for ad-hoc ts queries?
         const result: Array<string> = [];
         if (queryString === '') {
-            queryString = `(class_declaration @decl)`;
+            queryString = `(parser_output)@target`;
         }
         const query: TreeSitter.Query = new TreeSitter.Query(this.treeSitterLanguage, queryString);
         const globalCaptures: QueryCapture[] = query.captures(this.treeSitterNodeTree.rootNode);
@@ -78,7 +77,7 @@ export default class ScanManager {
     private async commonScan(): Promise<ScanResult[]> {
         const contextRules = this.scannerRules;
 
-        const scanResultList: ScanResult[] = [];
+        let scanResultList: ScanResult[] = [];
 
         for (const ruleIteration of contextRules) {
             // This next line normalizes the priority to the highest level of severity in case someone tries to
@@ -86,19 +85,14 @@ export default class ScanManager {
             // sarif severity levels.
             ruleIteration.Priority =
                 ruleIteration.Priority > ResultType.VIOLATION ? ResultType.VIOLATION : ruleIteration.Priority;
-            const queryText = ruleIteration.Query;
 
             try {
-                const filteredRoot: SyntaxNode = ruleIteration.preFilter(this.treeSitterNodeTree.rootNode);
-                // Prettier reformats this into a blatant syntax error
-                const captureQuery: TreeSitter.Query = new TreeSitter.Query(this.treeSitterLanguage, queryText);
-                const ruleContext = ruleIteration.Context ?? 'scan';
-                ruleIteration.validateQuery(captureQuery, filteredRoot).forEach((capturedNode) => {
-                    scanResultList.push(
-                        new ScanResult(ruleIteration, ruleIteration.ResultType, capturedNode as Parser.SyntaxNode)
-                    );
+                ruleIteration.validate(this.sourceCodeToScan, this.treeSitterParser).forEach((capturedNode) => {
+                    scanResultList.push(new ScanResult(ruleIteration, capturedNode));
                 });
+                scanResultList = ruleIteration.filterResults(scanResultList);
             } catch (treeSitterError: unknown) {
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
                 console.error(`A tree-sitter query error occurred: ${treeSitterError}`);
             }
         }
