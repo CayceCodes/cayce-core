@@ -8,24 +8,20 @@ import { ExampleRule } from '../rule/ExampleRule.js';
 
 // Third party imports
 import Parser from 'tree-sitter';
-import type { Language } from 'tree-sitter';
-import TsSfApex from 'tree-sitter-sfapex';
 
 export interface ScannerOptions {
     sourcePath: string;
-    rules: Array<ScanRule>;
+    rules: ScanRule[];
     overrideQuery?: string;
-    language?: Language;
 }
 
 export default class Scanner {
     // class properties
     private readonly sourcePath: string;
-    private sourceCode: string = '';
-    private readonly rules: Array<ScanRule>;
+    private sourceCode = '';
+    private readonly rules: ScanRule[];
     private scanManager: ScanManager;
     private readonly parser: Parser;
-    private readonly language: Language;
     private readonly overrideQuery: string;
 
     /// Static class methods
@@ -42,53 +38,67 @@ export default class Scanner {
     /// Public methods
     /**
      * @description Private constructor that is called by the `create(...)` singleton static method/
-     * @param options This object represents the various options for a scan. Most cases it's sourcePath (the location of the target source) and a rules array (an array of all rule instances that inherit from ScanRule that we will be applying to the aforementioned source)
+     * @param options This object represents the various options for a scan.
+     * Most cases it's sourcePath (the location of the target source) and an array of ScanRules
+     * (an array of all rule instances
+     * that inherit from ScanRule that we will be applying to the aforementioned source)
      */
     private constructor(options: ScannerOptions) {
         this.sourcePath = options.sourcePath;
         this.rules = options.rules;
         this.overrideQuery = options.overrideQuery ?? '';
         this.parser = new Parser();
-        // TODO: Languyage should be part of the rules (plugin) not the core
-        this.language = TsSfApex.apex;
-        this.scanManager = new ScanManager(this.parser, this.language, this.sourceCode, this.rules);
+        this.scanManager = new ScanManager(this.parser, this.sourceCode, this.rules);
     }
 
     /**
      * @description Does a standard scan with the rules and target specified in the ScannerOptions on instantiation
-     * @retuns A map of scan contexts (usually measure or scan, or both) to scan results. The result object references the rule instance, syntax node, and other related objects for use in getting more detailed informatioon
+     * @retuns A map of scan contexts (usually measure or scan, or both) to scan results.
+     * The result object references the rule instance, syntax node,
+     * and other related objects for use in getting more detailed information
      */
     public async run(): Promise<ScanResult[]> {
         return await this.scanManager.scan();
     }
 
     /**
-     * @description A simple dump that is the result of a tree sitter query/s-expression passed in to the method. If no query is specificed, it uses a default query that retrieves the body of a class.
+     * @description A simple dump that is the result of a tree sitter query/s-expression passed in to the method.
+     * If no query is specified, it uses a default query that retrieves the body of a class.
      * @param overrideQuery If you wish to use a custom query, use it here.
      * @param sourceCode The source to be scanned. Useful when there is a use case for scanning multiple targets for debugging
-     * @param language The language to be used for the scan. Default to Apex
      */
-    public static async debug(overrideQuery: string, sourceCode: string, language?: Language): Promise<string> {
-        const scanManager: ScanManager = new ScanManager(new Parser(), language ?? TsSfApex.apex, sourceCode, [
-            new ExampleRule(),
-        ]);
+    public static debug(overrideQuery: string, sourceCode: string): string {
+        // @ts-ignore
+        const scanManager: ScanManager = new ScanManager(new Parser(), sourceCode, [new ExampleRule()]);
         // console.log(overrideQuery);
         return scanManager.dump(overrideQuery);
     }
 
+    /**
+     * Executes a measurement scan on the source code using the configured rules
+     * @returns A promise that resolves to an array of ScanResult objects containing measurement results
+     * @throws {Error} When the scan manager encounters an error during measurement
+     * @public
+     */
     public async measure(): Promise<ScanResult[]> {
         return await this.scanManager.measure();
     }
 
     // private methods
-    private async verifyAndReadFile(filePath: string): Promise<string> {
+    /**
+     * Verifies file existence and reads its contents
+     * @param filePath - The full path to the file to be read
+     * @returns A promise that resolves to the trimmed contents of the file as a string
+     * @throws {Error} When the file cannot be accessed or read
+     * @private
+     */ private async verifyAndReadFile(filePath: string): Promise<string> {
         try {
             await fs.access(filePath);
             const contents = await fs.readFile(filePath, 'utf-8');
             return contents.trim();
         } catch (error: unknown) {
-            console.error(`Unable to open file at ${filePath} due to ${error}`);
+            console.error(`Unable to open file at ${filePath} due to ${error as Error}`);
+            return Promise.reject(error as Error);
         }
-        return Promise.reject('Unable to open file');
     }
 }

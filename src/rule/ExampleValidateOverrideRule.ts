@@ -2,15 +2,14 @@ import { SyntaxNode } from 'tree-sitter';
 import {
     ScanResult,
     ScanRule,
-    ResultType,
     context,
     message,
     name,
-    priority,
-    query,
-    regex,
     suggestion,
     category,
+    treeQuery,
+    ruleSeverity,
+    RuleSeverity,
 } from 'cayce-types';
 
 @name('Check for description in the class header comment')
@@ -20,14 +19,13 @@ import {
 @suggestion(
     'A method name should be as descriptive as possible. Consider changing the name to reflect the function and utility of its purpose'
 )
-@priority(1)
-@query('(method_declaration (identifier)@a)')
-@regex('')
+@ruleSeverity(RuleSeverity.VIOLATION)
+@treeQuery('(method_declaration (identifier)@a)')
 export class ExampleValidateOverrideRule extends ScanRule {
     validateNode(node: SyntaxNode): ScanResult[] {
         const resultList: ScanResult[] = [];
         if (node.text.length < 4) {
-            resultList.push(new ScanResult(this, ResultType.VIOLATION));
+            resultList.push(new ScanResult(this, node));
         }
 
         return resultList;

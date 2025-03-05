@@ -1,17 +1,20 @@
-import TsSfApex from 'tree-sitter-sfapex';
 import Scanner from '../core/Scanner.js';
 import { ExampleRule } from '../rule/ExampleRule.js';
+import { jest } from '@jest/globals';
+import path from 'node:path';
 
-test('Positive test for description', () => {
+test('Positive test for description', async () => {
+    const consoleSpy = jest.spyOn(console, 'error');
+
+    const testFilePath = path.join('./src/__tests__/', 'SampleApex.cls');
     const options = {
-        rules: [new ExampleRule('public class Foo{}')],
-        sourcePath: './src/__tests__/SampleApex.cls',
-        language: TsSfApex.apex,
+        // @ts-ignore
+        rules: [new ExampleRule()],
+        sourcePath: testFilePath,
     };
 
-    Scanner.create(options).then((scanner) => {
-        scanner.run().then((results) => {
-            expect(results.length).toBeGreaterThanOrEqual(0);
-        });
-    });
+    const scanner = await Scanner.create(options);
+    const results = await scanner.run();
+    expect(results.length).toBeGreaterThanOrEqual(0);
+    expect(consoleSpy).not.toHaveBeenCalled();
 });
