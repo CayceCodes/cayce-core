@@ -23,7 +23,7 @@
         "typeRoots": ["./node_modules/@types", "./src/types", "./node_modules/tree-sitter-sfapex"],
         "types": ["node", "jest"]
     },
-    "exclude": ["node_modules", "dist", "jest.config.ts", "src/__tests__/**/*"],
+    "exclude": ["node_modules", "dist", "jest.config.ts"],
     "include": ["src/**/*", "src/index.ts"],
     "ts-node": {
         "esm": true

@@ -1,20 +1,30 @@
 import eslint from '@eslint/js';
-import tseslint from '@typescript-eslint/eslint-plugin';
+import tseslint from 'typescript-eslint';
 import typescript from '@typescript-eslint/parser';
 import prettier from 'eslint-config-prettier';
 
-export default [
+export default tseslint.config(
     eslint.configs.recommended,
+    tseslint.configs.strictTypeChecked,
+    tseslint.configs.stylisticTypeChecked,
+    tseslint.configs.recommendedTypeChecked,
+    prettier,
     {
-        ignores: ['**/dist/**/*.+(js|ts)', '**/node_modules/**/*.+(js|ts)'],
+        ignores: ['**/dist/**/*.+(js|ts)', '**/node_modules/**/*.+(js|ts)', 'eslint.config.js', 'jest.config.ts'],
     },
     {
-        files: ['src/*.ts'],
+        files: ['src/**/*.ts'],
         languageOptions: {
             parser: typescript,
             parserOptions: {
                 ecmaVersion: 'latest',
-                sourceType: 'module'
+                projectService: true,
+                projectServiceOptions: {
+                    defaultProject: true
+                },
+                project: './tsconfig.json',
+                sourceType: 'module',
+                tsconfigRootDir: import.meta.dirname,
             },
             globals: {
                 console: 'readonly',
@@ -28,12 +38,20 @@ export default [
                 afterEach: 'readonly',
             }
         },
-        plugins: {
-            '@typescript-eslint': tseslint
-        },
         rules: {
-            ...tseslint.configs.recommended.rules
-        }
+            '@typescript-eslint/no-unused-vars': [
+                'error',
+                {
+                    args: 'all',
+                    argsIgnorePattern: '^_',
+                    caughtErrors: 'all',
+                    caughtErrorsIgnorePattern: '^_',
+                    destructuredArrayIgnorePattern: '^_',
+                    varsIgnorePattern: '^_',
+                    ignoreRestSiblings: true,
+                },
+            ],
+        },
     },
     {
         files: ['**/__tests__/**/*.ts'],
@@ -51,6 +69,5 @@ export default [
                 console: 'readonly'
             }
         }
-    },
-    prettier
-];
+    }
+);
