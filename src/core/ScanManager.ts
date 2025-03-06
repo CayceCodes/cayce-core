@@ -1,9 +1,8 @@
 import Parser, { type Language, QueryCapture, SyntaxNode } from 'tree-sitter';
-import ScanResult, { ResultType } from './ScanResult.js';
+import { ScanResult } from 'cayce-types';
 import { ScanRule } from 'cayce-types';
 import TreeSitter from 'tree-sitter';
-import { ShortIdentifierLengths } from './rules/ShortIdentifierLengths.js';
-import { AllIdentifierLengths } from './rules/AllIdentifierLengths.js';
+import { RuleSeverity } from 'cayce-types';
 
 export default class ScanManager {
     private treeSitterNodeTree!: Parser.Tree;
@@ -21,30 +20,18 @@ export default class ScanManager {
      * @param sourceCode The source code to be scanned
      * @param rules An array of ScanRule objects that dictate what to scan for
      */
-    constructor(parser: Parser, sourceCode: string, rules: (ShortIdentifierLengths | AllIdentifierLengths)[]) {
+    constructor(parser: Parser, sourceCode: string, rules: ScanRule[]) {
         this.sourceCodeToScan = sourceCode;
         this.scannerRules = rules;
         this.treeSitterParser = parser;
     }
 
     /**
-     * Dump is here as a way to quickly test out new rules without having to create them. It's basically
-     * a mini playground.
-     * @param queryString A tree sitter query. It can be as simple or as complex as you want.
-     * @returns `string` The actual source fragment(s) selected by the query, identified in the matches collection, and stored in the capture collection under that.
+     * @param languageToDump A valid tree sitter language. This will return all valid grammar types for a given language (named or anonymous) as a JSON string
+     * @returns `string` JSON of all valid grammar types
      */
-    dump(queryString: string): string {
-        // Use dump as a mechanism to allow for ad-hoc ts queries?
-        const result: Array<string> = [];
-        if (queryString === '') {
-            queryString = `(parser_output)@target`;
-        }
-        const query: TreeSitter.Query = new TreeSitter.Query(this.treeSitterLanguage, queryString);
-        const globalCaptures: QueryCapture[] = query.captures(this.treeSitterNodeTree.rootNode);
-        globalCaptures.forEach((capture) => {
-            result.push(`@${capture.name}=${capture.node.text}`);
-        });
-        return JSON.stringify(result);
+    dump(languageToDump: TreeSitter.Language): string {
+        return JSON.stringify(languageToDump.nodeTypeInfo);
     }
 
     /**
@@ -84,7 +71,7 @@ export default class ScanManager {
             // execute a rule with a priority of 16452 or something. That priority wouldn't be mappable to
             // sarif severity levels.
             ruleIteration.Priority =
-                ruleIteration.Priority > ResultType.VIOLATION ? ResultType.VIOLATION : ruleIteration.Priority;
+                ruleIteration.Priority > RuleSeverity.VIOLATION ? RuleSeverity.VIOLATION : ruleIteration.Priority;
 
             try {
                 ruleIteration.validate(this.sourceCodeToScan, this.treeSitterParser).forEach((capturedNode) => {

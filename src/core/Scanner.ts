@@ -4,7 +4,6 @@ import * as fs from 'node:fs/promises';
 // Local imports
 import ScanManager from '../core/ScanManager.js';
 import { ScanRule, ScanResult } from 'cayce-types';
-import { ExampleRule } from '../rule/ExampleRule.js';
 
 // Third party imports
 import Parser from 'tree-sitter';
@@ -25,8 +24,6 @@ export default class Scanner {
     private readonly rules: Array<ScanRule>;
     private scanManager: ScanManager;
     private readonly parser: Parser;
-    private readonly language: Language;
-    private readonly overrideQuery: string;
 
     /// Static class methods
     /**
@@ -47,11 +44,8 @@ export default class Scanner {
     private constructor(options: ScannerOptions) {
         this.sourcePath = options.sourcePath;
         this.rules = options.rules;
-        this.overrideQuery = options.overrideQuery ?? '';
         this.parser = new Parser();
-        // TODO: Languyage should be part of the rules (plugin) not the core
-        this.language = TsSfApex.apex;
-        this.scanManager = new ScanManager(this.parser, this.language, this.sourceCode, this.rules);
+        this.scanManager = new ScanManager(this.parser, this.sourceCode, this.rules);
     }
 
     /**
@@ -60,20 +54,6 @@ export default class Scanner {
      */
     public async run(): Promise<ScanResult[]> {
         return await this.scanManager.scan();
-    }
-
-    /**
-     * @description A simple dump that is the result of a tree sitter query/s-expression passed in to the method. If no query is specificed, it uses a default query that retrieves the body of a class.
-     * @param overrideQuery If you wish to use a custom query, use it here.
-     * @param sourceCode The source to be scanned. Useful when there is a use case for scanning multiple targets for debugging
-     * @param language The language to be used for the scan. Default to Apex
-     */
-    public static async debug(overrideQuery: string, sourceCode: string, language?: Language): Promise<string> {
-        const scanManager: ScanManager = new ScanManager(new Parser(), language ?? TsSfApex.apex, sourceCode, [
-            new ExampleRule(),
-        ]);
-        // console.log(overrideQuery);
-        return scanManager.dump(overrideQuery);
     }
 
     public async measure(): Promise<ScanResult[]> {
