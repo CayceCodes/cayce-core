@@ -39,7 +39,7 @@
     },
     "homepage": "https://github.com/caycecodes/cayce-core#readme",
     "dependencies": {
-        "@eslint/js": "^9.20.0",
+        "cayce-types": "^1.0.14",
         "tree-sitter": "^0.22.4",
         "tree-sitter-sfapex": "^2.4.1"
     },
