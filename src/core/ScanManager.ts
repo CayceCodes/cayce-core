@@ -1,6 +1,8 @@
 import Parser, { type Language, QueryCapture, SyntaxNode } from 'tree-sitter';
-import { ScanRule, ScanResult } from 'cayce-types';
+import { ScanResult } from 'cayce-types';
+import { ScanRule } from 'cayce-types';
 import TreeSitter from 'tree-sitter';
+import { RuleSeverity } from 'cayce-types';
 
 export default class ScanManager {
     private treeSitterNodeTree!: Parser.Tree;
@@ -24,23 +26,11 @@ export default class ScanManager {
     }
 
     /**
-     * Dump is here as a way to quickly test out new rules without having to create them. It's basically
-     * a mini playground.
-     * @param queryString A tree sitter query. It can be as simple or as complex as you want.
-     * @returns `string` The actual source fragment(s) selected by the query, identified in the matches collection, and stored in the capture collection under that.
+     * @param languageToDump A valid tree sitter language. This will return all valid grammar types for a given language (named or anonymous) as a JSON string
+     * @returns `string` JSON of all valid grammar types
      */
-    dump(queryString: string): string {
-        // Use dump as a mechanism to allow for ad-hoc ts queries?
-        const result: Array<string> = [];
-        if (queryString === '') {
-            queryString = `(parser_output)@target`;
-        }
-        const query: TreeSitter.Query = new TreeSitter.Query(this.treeSitterLanguage, queryString);
-        const globalCaptures: QueryCapture[] = query.captures(this.treeSitterNodeTree.rootNode);
-        globalCaptures.forEach((capture) => {
-            result.push(`@${capture.name}=${capture.node.text}`);
-        });
-        return JSON.stringify(result);
+    dump(languageToDump: TreeSitter.Language): string {
+        return JSON.stringify(languageToDump.nodeTypeInfo);
     }
 
     /**
@@ -54,6 +44,7 @@ export default class ScanManager {
     /**
      * Scan is the scanner main method for inspecting code for violations of given rules.
      * Rules are provided to the ScanManager from elsewhere.
+     * TODO: Refactor the private commonScan method so that it iterates through a supplied set of rules invoked through a dynamic import
      * @returns A map of categories->list of violations
      */
     async scan(): Promise<ScanResult[]> {
@@ -75,21 +66,20 @@ export default class ScanManager {
      * @private
      */
     private async commonScan(): Promise<ScanResult[]> {
-        const scanPromises = this.scannerRules.map(async (currentRule) => {
-            try {
-                const currentRuleResults = currentRule
-                    .validate(this.sourceCodeToScan, this.treeSitterParser)
-                    .map((capturedNode: SyntaxNode): ScanResult => {
-                        return new ScanResult(currentRule, capturedNode);
-                    });
-                return currentRule.filterResults(currentRuleResults);
-            } catch (treeSitterError: unknown) {
-                console.error(`A tree-sitter query error occurred: ${treeSitterError as Error}`);
-                return [];
-            }
-        });
+        const contextRules = this.scannerRules;
 
-        const results = await Promise.all(scanPromises);
-        return results.flat();
+        let scanResultList: ScanResult[] = [];
+
+        for (const ruleIteration of contextRules) {
+            try {
+                ruleIteration.validate(this.sourceCodeToScan, this.treeSitterParser).forEach((capturedNode) => {
+                    scanResultList.push(new ScanResult(ruleIteration, capturedNode));
+                });
+            } catch (treeSitterError: unknown) {
+                // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+                console.error(`A tree-sitter query error occurred: ${treeSitterError}`);
+            }
+        }
+        return scanResultList;
     }
 }
