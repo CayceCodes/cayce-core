@@ -8,11 +8,10 @@ import { ScanRule, ScanResult } from 'cayce-types';
 // Third party imports
 import Parser from 'tree-sitter';
 import type { Language } from 'tree-sitter';
-import TsSfApex from 'tree-sitter-sfapex';
 
 export interface ScannerOptions {
     sourcePath: string;
-    rules: Array<ScanRule>;
+    rules: ScanRule[];
     overrideQuery?: string;
     language?: Language;
 }
@@ -20,8 +19,8 @@ export interface ScannerOptions {
 export default class Scanner {
     // class properties
     private readonly sourcePath: string;
-    private sourceCode: string = '';
-    private readonly rules: Array<ScanRule>;
+    private sourceCode = '';
+    private readonly rules: ScanRule[];
     private scanManager: ScanManager;
     private readonly parser: Parser;
 
@@ -39,7 +38,10 @@ export default class Scanner {
     /// Public methods
     /**
      * @description Private constructor that is called by the `create(...)` singleton static method/
-     * @param options This object represents the various options for a scan. Most cases it's sourcePath (the location of the target source) and a rules array (an array of all rule instances that inherit from ScanRule that we will be applying to the aforementioned source)
+     * @param options This object represents the various options for a scan.
+     * Most cases it's sourcePath (the location of the target source) and an array of rules
+     * (an array of all rule instances
+     * that inherit from ScanRule that we will be applying to the aforementioned source)
      */
     private constructor(options: ScannerOptions) {
         this.sourcePath = options.sourcePath;
@@ -50,7 +52,9 @@ export default class Scanner {
 
     /**
      * @description Does a standard scan with the rules and target specified in the ScannerOptions on instantiation
-     * @retuns A map of scan contexts (usually measure or scan, or both) to scan results. The result object references the rule instance, syntax node, and other related objects for use in getting more detailed informatioon
+     * @retuns A map of scan contexts (usually measure or scan, or both) to scan results.
+     * The result object references the rule instance, syntax node,
+     * and other related objects for use in getting more detailed information
      */
     public async run(): Promise<ScanResult[]> {
         return await this.scanManager.scan();
@@ -67,8 +71,8 @@ export default class Scanner {
             const contents = await fs.readFile(filePath, 'utf-8');
             return contents.trim();
         } catch (error: unknown) {
-            console.error(`Unable to open file at ${filePath} due to ${error}`);
+            console.error(`Unable to open file at ${filePath} due to ${error as Error}`);
+            return Promise.reject(error as Error);
         }
-        return Promise.reject('Unable to open file');
     }
 }

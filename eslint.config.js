@@ -4,13 +4,17 @@ import typescript from '@typescript-eslint/parser';
 import prettier from 'eslint-config-prettier';
 
 export default tseslint.config(
-    eslint.configs.recommended,
-    tseslint.configs.strictTypeChecked,
-    tseslint.configs.stylisticTypeChecked,
-    tseslint.configs.recommendedTypeChecked,
-    prettier,
     {
-        ignores: ['**/dist/**/*.+(js|ts)', '**/node_modules/**/*.+(js|ts)', 'eslint.config.js', 'jest.config.ts'],
+        extends: [
+            eslint.configs.recommended,
+            ...tseslint.configs.strictTypeChecked,
+            ...tseslint.configs.stylisticTypeChecked,
+            ...tseslint.configs.recommendedTypeChecked,
+            prettier,
+        ],
+    },
+    {
+        ignores: ['**/dist/**/*.+(js|ts)', '**/node_modules/**/*.+(js|ts)', 'eslint.config.js', 'jest.config.js'],
     },
     {
         files: ['src/**/*.ts'],
@@ -20,7 +24,7 @@ export default tseslint.config(
                 ecmaVersion: 'latest',
                 projectService: true,
                 projectServiceOptions: {
-                    defaultProject: true
+                    defaultProject: true,
                 },
                 project: './tsconfig.json',
                 sourceType: 'module',
@@ -36,7 +40,7 @@ export default tseslint.config(
                 beforeAll: 'readonly',
                 afterAll: 'readonly',
                 afterEach: 'readonly',
-            }
+            },
         },
         rules: {
             '@typescript-eslint/no-unused-vars': [
@@ -66,8 +70,8 @@ export default tseslint.config(
                 afterEach: 'readonly',
                 beforeAll: 'readonly',
                 afterAll: 'readonly',
-                console: 'readonly'
-            }
-        }
+                console: 'readonly',
+            },
+        },
     }
 );

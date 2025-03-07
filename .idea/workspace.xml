@@ -4,17 +4,20 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d59982dc-e620-49b9-ae81-262fcafae95b" name="Changes" comment="refactor(rules): adjusting to new rule format&#10;&#10;in-progress. committing to allow collaboration.">
-      <change afterPath="$PROJECT_DIR$/.idea/git_toolbox_prj.xml" afterDir="false" />
+    <list default="true" id="d59982dc-e620-49b9-ae81-262fcafae95b" name="Changes" comment="chore(release): preparing for new release">
+      <change afterPath="$PROJECT_DIR$/src/__tests__/ScanManager.test.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/__tests__/mocks/MockScanRule.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/AugmentWebviewStateStore.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/eslint.config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jest.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/jest.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/__tests__/SampleApex.cls" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/SampleApex.cls" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/__tests__/dumpTest.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/dump.test.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/__tests__/standinTest.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/__tests__/standin.test.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/ScanManager.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/ScanManager.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/core/Scanner.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/core/Scanner.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/rule/ExampleRule.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/rule/ExampleRule.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +60,18 @@
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Jest.Positive test for description.executor": "Run",
+    "Jest.ScanManager.constructor.executor": "Run",
+    "Jest.ScanManager.constructor.should create a ScanManager instance with valid parameters.executor": "Run",
+    "Jest.ScanManager.dump.executor": "Run",
+    "Jest.ScanManager.dump.should return JSON string of language node type info.executor": "Run",
+    "Jest.ScanManager.error handling.should log errors and continue processing when a rule throws.executor": "Run",
+    "Jest.ScanManager.executor": "Run",
+    "Jest.ScanManager.measure.executor": "Run",
+    "Jest.ScanManager.measure.should return empty array when no source code is provided.executor": "Run",
+    "Jest.ScanManager.measure.should return scan results for valid input.executor": "Run",
+    "Jest.ScanManager.scan.executor": "Run",
+    "Jest.ScanManager.scan.should handle rule validation errors gracefully.executor": "Run",
+    "Jest.ScanManager.scan.should process multiple rules in parallel.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
@@ -74,27 +89,104 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0",
-    "settings.editor.selected.configurable": "Errors",
+    "settings.editor.selected.configurable": "settings.javascript.prettier",
     "ts.external.directory.path": "/Users/kevinpoorman/src/cayce/cayce-core/node_modules/typescript/lib"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration name="Positive test for description" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Jest.ScanManager">
+    <configuration name="ScanManager" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
       <node-interpreter value="project" />
-      <node-options value="--experimental-vm-modules" />
+      <node-options value="--experimental-vm-modules --loader ts-node/esm" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/__tests__/ScanManager.test.ts" />
+      <test-names>
+        <test-name value="ScanManager" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="ScanManager.error handling.should log errors and continue processing when a rule throws" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="--experimental-vm-modules --loader ts-node/esm" />
       <jest-package value="$PROJECT_DIR$/node_modules/jest" />
       <working-dir value="$PROJECT_DIR$" />
       <envs />
       <scope-kind value="TEST" />
-      <test-file value="$PROJECT_DIR$/src/__tests__/exampleRuleTest.ts" />
+      <test-file value="$PROJECT_DIR$/src/__tests__/ScanManager.test.ts" />
       <test-names>
-        <test-name value="Positive test for description" />
+        <test-name value="ScanManager" />
+        <test-name value="error handling" />
+        <test-name value="should log errors and continue processing when a rule throws" />
       </test-names>
       <method v="2" />
     </configuration>
+    <configuration name="ScanManager.scan" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="--experimental-vm-modules --loader ts-node/esm" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="SUITE" />
+      <test-file value="$PROJECT_DIR$/src/__tests__/ScanManager.test.ts" />
+      <test-names>
+        <test-name value="ScanManager" />
+        <test-name value="scan" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="ScanManager.scan.should handle rule validation errors gracefully" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="--experimental-vm-modules --loader ts-node/esm" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/__tests__/ScanManager.test.ts" />
+      <test-names>
+        <test-name value="ScanManager" />
+        <test-name value="scan" />
+        <test-name value="should handle rule validation errors gracefully" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration name="ScanManager.scan.should process multiple rules in parallel" type="JavaScriptTestRunnerJest" temporary="true" nameIsGenerated="true">
+      <node-interpreter value="project" />
+      <node-options value="--experimental-vm-modules --loader ts-node/esm" />
+      <jest-package value="$PROJECT_DIR$/node_modules/jest" />
+      <working-dir value="$PROJECT_DIR$" />
+      <envs />
+      <scope-kind value="TEST" />
+      <test-file value="$PROJECT_DIR$/src/__tests__/ScanManager.test.ts" />
+      <test-names>
+        <test-name value="ScanManager" />
+        <test-name value="scan" />
+        <test-name value="should process multiple rules in parallel" />
+      </test-names>
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="JavaScriptTestRunnerJest">
+      <node-interpreter value="project" />
+      <node-options value="--experimental-vm-modules --loader ts-node/esm" />
+      <envs />
+      <scope-kind value="ALL" />
+      <method v="2" />
+    </configuration>
+    <list>
+      <item itemvalue="Jest.ScanManager" />
+      <item itemvalue="Jest.ScanManager.error handling.should log errors and continue processing when a rule throws" />
+      <item itemvalue="Jest.ScanManager.scan.should handle rule validation errors gracefully" />
+      <item itemvalue="Jest.ScanManager.scan.should process multiple rules in parallel" />
+      <item itemvalue="Jest.ScanManager.scan" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Jest.Positive test for description" />
+        <item itemvalue="Jest.ScanManager" />
+        <item itemvalue="Jest.ScanManager.scan.should process multiple rules in parallel" />
+        <item itemvalue="Jest.ScanManager.error handling.should log errors and continue processing when a rule throws" />
+        <item itemvalue="Jest.ScanManager.scan.should handle rule validation errors gracefully" />
+        <item itemvalue="Jest.ScanManager.scan" />
       </list>
     </recent_temporary>
   </component>
@@ -119,7 +211,8 @@
       <workItem from="1740705104541" duration="602000" />
       <workItem from="1741022675459" duration="14318000" />
       <workItem from="1741112759441" duration="599000" />
-      <workItem from="1741128694316" duration="31805000" />
+      <workItem from="1741128694316" duration="41621000" />
+      <workItem from="1741329898192" duration="7470000" />
     </task>
     <task id="LOCAL-00001" summary="refactor(rules): adjusting to new rule format&#10;&#10;in-progress. committing to allow collaboration.">
       <option name="closed" value="true" />
@@ -137,7 +230,15 @@
       <option name="project" value="LOCAL" />
       <updated>1741214855705</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="chore(release): preparing for new release">
+      <option name="closed" value="true" />
+      <created>1741312829814</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1741312829814</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -145,147 +246,85 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="refactor(rules): adjusting to new rule format&#10;&#10;in-progress. committing to allow collaboration." />
-    <option name="LAST_COMMIT_MESSAGE" value="refactor(rules): adjusting to new rule format&#10;&#10;in-progress. committing to allow collaboration." />
+    <MESSAGE value="chore(release): preparing for new release" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore(release): preparing for new release" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/core/ScanManager.ts</url>
-          <line>83</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/__tests__/exampleRuleTest.ts</url>
-          <line>17</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/__tests__/exampleRuleTest.ts</url>
-          <line>16</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/core/Scanner.ts</url>
-          <line>36</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/__tests__/exampleRuleTest.ts</url>
-          <line>15</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/core/ScanManager.ts</url>
-          <line>84</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/core/ScanManager.ts</url>
-          <line>79</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/core/ScanManager.ts</url>
-          <line>80</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/cayce-types/dist/scan-rule.js</url>
           <line>75</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/cayce-types/dist/scan-rule.js</url>
           <line>76</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/cayce-types/dist/scan-rule.js</url>
           <line>77</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/cayce-types/dist/scan-rule.js</url>
           <line>78</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/cayce-types/dist/scan-rule.js</url>
           <line>79</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="15" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/cayce-types/dist/scan-rule.js</url>
           <line>80</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/cayce-types/dist/scan-rule.js</url>
           <line>81</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/cayce-types/dist/scan-rule.js</url>
           <line>82</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/node_modules/cayce-types/dist/scan-rule.js</url>
           <line>83</line>
-          <properties lambdaOrdinal="-1" />
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/../cayce-types/src/scan-rule.ts</url>
-          <line>99</line>
-          <properties lambdaOrdinal="-1" />
+          <line>98</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/../cayce-types/src/scan-rule.ts</url>
-          <line>100</line>
-          <properties lambdaOrdinal="-1" />
+          <line>99</line>
           <option name="timeStamp" value="21" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/../cayce-types/src/scan-rule.ts</url>
-          <line>101</line>
-          <properties lambdaOrdinal="-1" />
+          <line>100</line>
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/../cayce-types/src/scan-rule.ts</url>
-          <line>103</line>
-          <properties lambdaOrdinal="-1" />
+          <line>102</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/../cayce-types/src/scan-rule.ts</url>
-          <line>104</line>
-          <properties lambdaOrdinal="-1" />
+          <line>103</line>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/../cayce-types/src/scan-rule.ts</url>
-          <line>105</line>
-          <properties lambdaOrdinal="-1" />
+          <line>104</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
       </breakpoints>

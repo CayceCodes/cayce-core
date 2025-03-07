@@ -10,7 +10,7 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "shx rm -rf dist && tsc -b",
-        "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "test": "node --experimental-vm-modules --loader ts-node/esm node_modules/jest/bin/jest.js",
         "lint": "eslint . -c eslint.config.js",
         "format": "prettier --write \"**/*.{ts,json,md}\"",
         "prepare": "npm run build",
@@ -39,11 +39,12 @@
     },
     "homepage": "https://github.com/caycecodes/cayce-core#readme",
     "dependencies": {
-        "cayce-types": "^1.0.14",
+        "cayce-types": "^1.0.15",
         "tree-sitter": "^0.22.4",
         "tree-sitter-sfapex": "^2.4.1"
     },
     "devDependencies": {
+        "@eslint/js": "^9.20.0",
         "@types/jest": "^29.5.14",
         "@types/node": "^22.13.4",
         "@typescript-eslint/eslint-plugin": "^8.24.0",
@@ -56,7 +57,8 @@
         "shx": "^0.3.4",
         "ts-jest": "^29.2.5",
         "ts-node": "^10",
-        "typescript": "^5"
+        "typescript": "^5",
+        "typescript-eslint": "^8.24.1"
     },
     "include": [
         "src/**/*"
