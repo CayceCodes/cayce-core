@@ -11,7 +11,7 @@ export default class ScanManager {
     /**
      * Creates a new ScanManager instance for analyzing source code using tree-sitter.
      * class requires construction via this constructor which dictates the rules to be used, the language to be scanned,
-     * 
+     *
      * @param parser - A configured tree-sitter parser instance for the target language
      * @param sourceCode - The source code content to be analyzed
      * @param rules - An array of ScanRule instances that define the analysis criteria
@@ -25,7 +25,7 @@ export default class ScanManager {
     /**
      * Dumps the grammar type information for a given tree-sitter language.
      * Useful for debugging and rule development.
-     * 
+     *
      * @param languageToDump - The tree-sitter language to inspect
      * @returns `string` JSON of all valid grammar types
      */
@@ -36,7 +36,7 @@ export default class ScanManager {
     /**
      * Analyzes the source code to collect metrics based on the provided rules.
      * Used for gathering statistics rather than finding violations.
-     * 
+     *
      * @returns A promise resolving to an array of measurement results
      */
     async measure(): Promise<ScanResult[]> {
@@ -45,7 +45,7 @@ export default class ScanManager {
 
     /**
      * Analyzes the source code for rule violations using the configured rules.
-     * 
+     *
      * @returns A promise resolving to an array of rule violation results
      */
     async scan(): Promise<ScanResult[]> {
@@ -54,13 +54,13 @@ export default class ScanManager {
 
     /**
      * Core scanning implementation shared by both scan() and measure() methods.
-     * 
+     *
      * Process:
      * 1. Validates input conditions (source code and rules presence)
      * 2. Executes each rule's validation logic in parallel
      * 3. Transforms tree-sitter nodes into ScanResult objects
      * 4. Handles any parsing errors that occur during rule execution
-     * 
+     *
      * @returns A promise resolving to an array of scan results
      * @throws Never throws - errors are caught and logged, returning empty results for failed rules
      * @private
