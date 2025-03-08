@@ -22,6 +22,9 @@ export default class ScanManager {
         this.treeSitterParser = parser;
     }
 
+    private getSourceCode(): string {
+        return this.sourceCodeToScan;
+    }
     /**
      * Dumps the grammar type information for a given tree-sitter language.
      * Useful for debugging and rule development.
@@ -59,7 +62,7 @@ export default class ScanManager {
      * 1. Validates input conditions (source code and rules presence)
      * 2. Executes each rule's validation logic in parallel
      * 3. Transforms tree-sitter nodes into ScanResult objects
-     * 4. Handles any parsing errors that occur during rule execution
+     * 4. Handle any parsing errors that occur during rule execution
      *
      * @returns A promise resolving to an array of scan results
      * @throws Never throws - errors are caught and logged, returning empty results for failed rules
@@ -67,12 +70,14 @@ export default class ScanManager {
      */
     private async commonScan(): Promise<ScanResult[]> {
         if (!this.sourceCodeToScan || !this.scannerRules.length) {
-            return [];
+            console.error(`No source code provided for scanning?: ${this.sourceCodeToScan}`);
+            return []; 
         }
         const results = await Promise.all(
             this.scannerRules.map((rule: ScanRule): ScanResult[] => {
                 try {
                     const validationResults: SyntaxNode[] = rule.validate(this.sourceCodeToScan, this.treeSitterParser);
+                    console.dir(validationResults);
                     return validationResults.map((node: SyntaxNode): ScanResult => new ScanResult(rule, node));
                 } catch (error: unknown) {
                     console.error(`Tree-sitter query error in rule ${rule.constructor.name}:`, error);

@@ -30,9 +30,12 @@ export default class Scanner {
      * @param options {ScannerOptions} - The options object that contains the sourcePath, rules, and overrideQuery.
      */
     static async create(options: ScannerOptions): Promise<Scanner> {
-        const scanner = new Scanner(options);
-        scanner.sourceCode = await scanner.verifyAndReadFile(scanner.sourcePath);
-        return scanner;
+        const sourceCode = await Scanner.verifyAndReadFile(options.sourcePath);
+        return new Scanner(options, sourceCode);
+    }
+
+    private getScanManager(): ScanManager {
+        return this.scanManager;
     }
 
     /// Public methods
@@ -43,11 +46,11 @@ export default class Scanner {
      * (an array of all rule instances
      * that inherit from ScanRule that we will be applying to the aforementioned source)
      */
-    private constructor(options: ScannerOptions) {
+    private constructor(options: ScannerOptions, sourceCode: string) {
         this.sourcePath = options.sourcePath;
         this.rules = options.rules;
         this.parser = new Parser();
-        this.scanManager = new ScanManager(this.parser, this.sourceCode, this.rules);
+        this.scanManager = new ScanManager(this.parser, sourceCode, this.rules);
     }
 
     /**
@@ -65,7 +68,7 @@ export default class Scanner {
     }
 
     // private methods
-    private async verifyAndReadFile(filePath: string): Promise<string> {
+    private static async verifyAndReadFile(filePath: string): Promise<string> {
         try {
             await fs.access(filePath);
             const contents = await fs.readFile(filePath, 'utf-8');
