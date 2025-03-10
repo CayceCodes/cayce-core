@@ -40,7 +40,7 @@
     },
     "homepage": "https://github.com/caycecodes/cayce-core#readme",
     "dependencies": {
-        "cayce-types": "^1.0.15",
+        "cayce-types": "file:../cayce-types",
         "tree-sitter": "^0.22.4",
         "tree-sitter-sfapex": "^2.4.1"
     },
