@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://github.com/caycecodes/cayce-core/compare/v2.0.0...v2.1.0) (2025-03-11)
+
+
+### Features
+
+* **tests:** Adding Functional test ([a8f6e77](https://github.com/caycecodes/cayce-core/commit/a8f6e779662b4cede0a91d39216f5343e03dc773))
+
 ## [2.0.0](https://github.com/caycecodes/cayce-core/compare/v0.0.45...v2.0.0) (2025-03-07)
 
 ### ⚠ BREAKING CHANGES
