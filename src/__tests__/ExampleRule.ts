@@ -1,7 +1,6 @@
 import { ruleSeverity, category, context, message, name, treeQuery, ScanRule, suggestion, id } from 'cayce-types';
 import TsSfApex from 'tree-sitter-sfapex';
 import { ScanResultDigest } from 'cayce-types';
-import Parser, { Query, QueryCapture } from 'tree-sitter';
 
 @id('ExampleRule')
 @name('Variable, constant or parameter name too short')
@@ -12,9 +11,11 @@ import Parser, { Query, QueryCapture } from 'tree-sitter';
 @ruleSeverity(3)
 @treeQuery('((variable_declarator name: (identifier)@target)@var)')
 export class ExampleRule extends ScanRule {
+
     TreeSitterLanguage = TsSfApex.apex;
 
     validate(targetSource: string): ScanResultDigest[] {
         return super.validate(targetSource);
     }
+
 }

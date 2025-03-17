@@ -1,10 +1,8 @@
-import Parser, { SyntaxNode } from 'tree-sitter';
 import { ScanResultDigest } from 'cayce-types';
 import { ScanRule } from 'cayce-types';
 import TreeSitter from 'tree-sitter';
 
 export default class ScanManager {
-    private treeSitterParser: Parser;
     private readonly scannerRules: ScanRule[];
     private readonly sourceCodeToScan: string;
 
@@ -16,10 +14,9 @@ export default class ScanManager {
      * @param sourceCode - The source code content to be analyzed
      * @param rules - An array of ScanRule instances that define the analysis criteria
      */
-    constructor(parser: Parser, sourceCode: string, rules: ScanRule[]) {
+    constructor(sourceCode: string, rules: ScanRule[]) {
         this.sourceCodeToScan = sourceCode;
         this.scannerRules = rules;
-        this.treeSitterParser = parser;
     }
 
     private getSourceCode(): string {

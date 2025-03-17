@@ -6,7 +6,6 @@ import ScanManager from '../core/ScanManager.js';
 import { ScanRule, ScanResultDigest } from 'cayce-types';
 
 // Third party imports
-import Parser from 'tree-sitter';
 import type { Language } from 'tree-sitter';
 
 export interface ScannerOptions {
@@ -22,7 +21,6 @@ export default class Scanner {
     private sourceCode = '';
     private readonly rules: ScanRule[];
     private scanManager: ScanManager;
-    private readonly parser: Parser;
 
     /// Static class methods
     /**
@@ -49,8 +47,7 @@ export default class Scanner {
     private constructor(options: ScannerOptions, sourceCode: string) {
         this.sourcePath = options.sourcePath;
         this.rules = options.rules;
-        this.parser = new Parser();
-        this.scanManager = new ScanManager(this.parser, sourceCode, this.rules);
+        this.scanManager = new ScanManager(sourceCode, this.rules);
     }
 
     /**
@@ -72,6 +69,7 @@ export default class Scanner {
         try {
             await fs.access(filePath);
             const contents = await fs.readFile(filePath, 'utf-8');
+            console.log(contents);
             return contents.trim();
         } catch (error: unknown) {
             console.error(`Unable to open file at ${filePath} due to ${error as Error}`);

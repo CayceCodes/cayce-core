@@ -24,3 +24,5 @@ checkin.bat
 
 src/**/*.js
 /.idea/
+
+**/tsconfig*.json

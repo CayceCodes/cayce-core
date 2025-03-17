@@ -1,5 +1,4 @@
 import { ruleSeverity, category, context, message, name, treeQuery, ScanRule, suggestion, id,ScanResultDigest } from 'cayce-types';
-import Parser from 'tree-sitter';
 
 @id('ExampleRule')
 @name('Variable, constant or parameter name too short')
