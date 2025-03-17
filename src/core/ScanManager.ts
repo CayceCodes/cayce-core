@@ -1,5 +1,5 @@
 import Parser, { SyntaxNode } from 'tree-sitter';
-import { ScanResult } from 'cayce-types';
+import { ScanResultDigest } from 'cayce-types';
 import { ScanRule } from 'cayce-types';
 import TreeSitter from 'tree-sitter';
 
@@ -42,7 +42,7 @@ export default class ScanManager {
      *
      * @returns A promise resolving to an array of measurement results
      */
-    async measure(): Promise<ScanResult[]> {
+    async measure(): Promise<ScanResultDigest[]> {
         return this.commonScan();
     }
 
@@ -51,7 +51,7 @@ export default class ScanManager {
      *
      * @returns A promise resolving to an array of rule violation results
      */
-    async scan(): Promise<ScanResult[]> {
+    async scan(): Promise<ScanResultDigest[]> {
         return await this.commonScan();
     }
 
@@ -68,17 +68,18 @@ export default class ScanManager {
      * @throws Never throws - errors are caught and logged, returning empty results for failed rules
      * @private
      */
-    private async commonScan(): Promise<ScanResult[]> {
+    private async commonScan(): Promise<ScanResultDigest[]> {
         if (!this.sourceCodeToScan || !this.scannerRules.length) {
             console.error(`No source code provided for scanning?: ${this.sourceCodeToScan}`);
             return []; 
         }
         const results = await Promise.all(
-            this.scannerRules.map((rule: ScanRule): ScanResult[] => {
+            this.scannerRules.map((rule: ScanRule): ScanResultDigest[] => {
                 try {
-                    const validationResults: SyntaxNode[] = rule.validate(this.sourceCodeToScan, this.treeSitterParser);
+
+                    const validationResults: ScanResultDigest[] = rule.validate(this.sourceCodeToScan);
                     console.dir(validationResults);
-                    return validationResults.map((node: SyntaxNode): ScanResult => new ScanResult(rule, node));
+                    return validationResults;
                 } catch (error: unknown) {
                     console.error(`Tree-sitter query error in rule ${rule.constructor.name}:`, error);
                     return [];

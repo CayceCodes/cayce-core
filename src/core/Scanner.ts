@@ -3,7 +3,7 @@ import * as fs from 'node:fs/promises';
 
 // Local imports
 import ScanManager from '../core/ScanManager.js';
-import { ScanRule, ScanResult } from 'cayce-types';
+import { ScanRule, ScanResultDigest } from 'cayce-types';
 
 // Third party imports
 import Parser from 'tree-sitter';
@@ -59,11 +59,11 @@ export default class Scanner {
      * The result object references the rule instance, syntax node,
      * and other related objects for use in getting more detailed information
      */
-    public async run(): Promise<ScanResult[]> {
+    public async run(): Promise<ScanResultDigest[]> {
         return await this.scanManager.scan();
     }
 
-    public async measure(): Promise<ScanResult[]> {
+    public async measure(): Promise<ScanResultDigest[]> {
         return await this.scanManager.measure();
     }
 
