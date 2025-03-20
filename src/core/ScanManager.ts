@@ -68,12 +68,11 @@ export default class ScanManager {
     private async commonScan(): Promise<ScanResultDigest[]> {
         if (!this.sourceCodeToScan || !this.scannerRules.length) {
             console.error(`No source code provided for scanning?: ${this.sourceCodeToScan}`);
-            return []; 
+            return [];
         }
         const results = await Promise.all(
             this.scannerRules.map((rule: ScanRule): ScanResultDigest[] => {
                 try {
-
                     const validationResults: ScanResultDigest[] = rule.validate(this.sourceCodeToScan);
                     console.dir(validationResults);
                     return validationResults;

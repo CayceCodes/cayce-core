@@ -21,6 +21,5 @@ test('Positive test for description', async () => {
     const values = await scanner.run();
     expect(consoleSpy).not.toHaveBeenCalled();
 
-    expect(values.length).toBeGreaterThanOrEqual(1)
-
+    expect(values.length).toBeGreaterThanOrEqual(1);
 });

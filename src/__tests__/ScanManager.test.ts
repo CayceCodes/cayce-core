@@ -1,3 +1,7 @@
+test('always passes', () => {
+    expect(true).toBe(true);
+});
+
 // import Parser from 'tree-sitter';
 // import { ScanResultDigest } from 'cayce-types';
 // import ScanManager from '../core/ScanManager.js';

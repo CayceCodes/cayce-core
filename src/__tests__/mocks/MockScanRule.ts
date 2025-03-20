@@ -1,4 +1,15 @@
-import { ruleSeverity, category, context, message, name, treeQuery, ScanRule, suggestion, id,ScanResultDigest } from 'cayce-types';
+import {
+    ruleSeverity,
+    category,
+    context,
+    message,
+    name,
+    treeQuery,
+    ScanRule,
+    suggestion,
+    id,
+    ScanResultDigest,
+} from 'cayce-types';
 
 @id('ExampleRule')
 @name('Variable, constant or parameter name too short')
@@ -37,4 +48,3 @@ export class MockScanRule extends ScanRule {
         return 'Mock rule for testing';
     }
 }
-

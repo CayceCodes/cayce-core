@@ -11,11 +11,9 @@ import { ScanResultDigest } from 'cayce-types';
 @ruleSeverity(3)
 @treeQuery('((variable_declarator name: (identifier)@target)@var)')
 export class ExampleRule extends ScanRule {
-
     TreeSitterLanguage = TsSfApex.apex;
 
     validate(targetSource: string): ScanResultDigest[] {
         return super.validate(targetSource);
     }
-
 }
