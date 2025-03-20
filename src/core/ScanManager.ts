@@ -74,7 +74,6 @@ export default class ScanManager {
             this.scannerRules.map((rule: ScanRule): ScanResultDigest[] => {
                 try {
                     const validationResults: ScanResultDigest[] = rule.validate(this.sourceCodeToScan);
-                    console.dir(validationResults);
                     return validationResults;
                 } catch (error: unknown) {
                     console.error(`Tree-sitter query error in rule ${rule.constructor.name}:`, error);

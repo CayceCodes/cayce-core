@@ -69,7 +69,6 @@ export default class Scanner {
         try {
             await fs.access(filePath);
             const contents = await fs.readFile(filePath, 'utf-8');
-            console.log(contents);
             return contents.trim();
         } catch (error: unknown) {
             console.error(`Unable to open file at ${filePath} due to ${error as Error}`);
