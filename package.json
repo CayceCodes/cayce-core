@@ -1,6 +1,6 @@
 {
     "name": "cayce-core",
-    "version": "2.2.1",
+    "version": "2.2.2",
     "type": "module",
     "description": "Static analysis using TypeScript and tree-sitter.",
     "main": "dist/index.js",

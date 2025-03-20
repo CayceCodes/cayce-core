@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [2.2.2](https://github.com/caycecodes/cayce-core/compare/v2.2.1...v2.2.2) (2025-03-20)
+
+
+### Bug Fixes
+
+* **ScanManager:** removing console output ([ac1e01d](https://github.com/caycecodes/cayce-core/commit/ac1e01d475a61abccce6e604a031ea55288de3e9))
+
 ### [2.2.1](https://github.com/caycecodes/cayce-core/compare/v2.2.0...v2.2.1) (2025-03-20)
 
 ## [2.2.0](https://github.com/caycecodes/cayce-core/compare/v2.1.4...v2.2.0) (2025-03-20)
